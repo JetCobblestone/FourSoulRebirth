@@ -109,7 +109,19 @@ Glossary:
 #TSW - Adjust swords/attack damage by #
 #ATK- Adjust number of remaining attacks by #
 #DIE - Adjust all dice rolls by number
-Loot # - Draw # loot cards
-Discard # - Discard # loot card from hand
-Treasure # - Draw a treasure card or pick one from the store until you have gained # treasures
+#L - Draw # loot cards (-ve draw is discard one of choice)
+#T - Draw a treasure card or pick one from the store until you have gained # treasures
 #C - Gain # coins (if # is -ve, lose coins)
+
+Loot Card Types:
+coin - Gain coins equal to num - num
+bomb - Deal damage equal to num - num
+roll - Roll dice, gain effect - rolls
+battery - Untap num items of chosen player - num
+prevent - Prevent num damage - num
+scry - Look at num1 top cards of specified deck, place num2 on top, place rest in player's chosen order - deck,num1,num2
+buff - increase certain stats by relevant nums - TSW,THP,ATK,DIE
+reroll - change dice roll to value determined by type - type
+deny - stop an item's active effect or a loot card - N/A
+unique - a unique effect - N/A
+trinket - a loot card played as a passive item - N/A

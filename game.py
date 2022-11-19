@@ -86,6 +86,10 @@ class MonsterCard(Card):
     def __init__(self, name):
         super().__init__(name)
 
+    def take_damage(self, turn_hp, damage):
+        turn_hp -= damage
+        if turn_hp <= 0:
+            dead = True
 
 class LootCard(Card):
     def __init__(self, name, type, func_args):
@@ -195,8 +199,6 @@ class Game:
                 pass
 
 
-
-
-
-game = Game(3)
-game.createDecks()
+def createGame(server):
+    print("creating game")
+    game = Game(len(server.connections), server)

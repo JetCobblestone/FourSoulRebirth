@@ -39,7 +39,7 @@ def add_listener(function, eventType):
 def receive_packet():
     while True:
         msg = client.recv(1024)
-        if msg.decode() == "":
+        if msg == b'':
             print("received empty string")
             return
         packetQueue.append(pickle.loads(msg))
@@ -57,6 +57,5 @@ while not quit:
     while len(packetQueue) != 0:
         event = packetQueue.pop(0)
         print("received " + str(event))
-        for listener in listeners[event.eventType]:
+        for listener in listeners.setdefault(event.eventType, []):
             listener(event)
-
