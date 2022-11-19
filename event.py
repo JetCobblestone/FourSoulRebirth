@@ -1,7 +1,9 @@
 from enum import Enum
 
 class EventType(Enum):
-    SET_COIN_EVENT = 1
+    CLIENTBOUND_CHARACTER_CHOICE = 1
+    SERVERBOUND_CHARACTER_CHOICE = 2
+    SERVERBOUND_CLIENT_JOIN = 3
 
 class Event:
 

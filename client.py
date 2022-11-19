@@ -30,7 +30,7 @@ client.send(str.encode("Client " + socket.gethostbyname(socket.gethostname()) + 
 packetQueue = []
 listeners = {}
 
-def add_listener(function, eventType):
+def addListener(eventType, function):
     functions = listeners.setdefault(eventType, [])
     functions.append(function)
     listeners[eventType] = functions
@@ -51,6 +51,9 @@ def sendEvent(event):
 
 
 _thread.start_new_thread(receive_packet, ())
+addListener(EventType.SERVERBOUND_CHARACTER_CHOICE, lambda event : event.data[0])
+sendEvent(Event(EventType.SERVERBOUND_CLIENT_JOIN, []))
+
 
 quit = False
 while not quit:

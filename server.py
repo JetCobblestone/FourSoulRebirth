@@ -10,6 +10,8 @@ class Server:
 
     socket = None
     connections = []
+    listeners = {}
+    eventQueue = []
 
     def __init__(self, port):
         self.socket = soc.socket(soc.AF_INET, soc.SOCK_STREAM)
@@ -66,13 +68,14 @@ class Server:
                 for function in self.listeners.setdefault(event.eventType, []):
                     function(event)
 
-        while True:
-            client, addr = self.socket.accept()
-            self.connections.append(client)
-            _thread.start_new_thread(threaded_client, (client,))
+
 
     def stop(self):
         self.socket.close()
 
+    def sendEvent(self, client, event):
+        client.send(pickle.dumps(event))
 
-
+    def addListener(self, event, function):
+        vals = self.listeners.setdefault(event, [])
+        self.listeners[event] = vals.append(function)

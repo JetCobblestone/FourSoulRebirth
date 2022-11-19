@@ -1,0 +1,114 @@
+Red Host,monster,2,3,2,5C,0,0
+Curse Of Greed, curse,0,0,0,0,0,0
+Evil Twin,monster,3,5,2,2T,0,1
+Wrath,monster,3,3,1,6C,1,1
+Fat Bat,monster,3,5,1,1T,0,0
+Dople,monster,2,4,2,7C,0,1
+Leech,monster,1,4,2,L1,0,0
+Mega Troll Bomb!,immediate,0,0,0,0,0,0
+Little Horn,monster,2,6,1,2L,0,0
+Leaper,monster,2,4,1,5C,0,1
+Mulligan,monster,1,3,1,3C,0,1
+Portal,monster,2,4,1,3C,0,1
+Mulliboom,monster,1,2,4,6C,0,1
+Black Bony,monster,3,4,1,xL,0,1
+Holy Dip,monster,1,3,1,1C,0,1
+Chest,immediate,0,0,0,0,0,0
+Greed,monster,3,4,1,9C,1,1
+Monstro,monster,4,4,1,6C,1,0
+Trite,monster,1,5,1,2l,0,0
+Devil Deal,immediate,0,0,0,0,0,0
+Death,monster,3,4,2,1L,1,1
+Rag Man,monster,2,3,2,L3,1,1
+Curse Of Pain,curse,0,0,0,0,0,0
+Psy Horf,monster,1,5,1,1L,0,0,0
+Curse Keeper Head,monster,2,4,1,xC,0,1
+Dark Chest,immediate,0,0,0,0,0,0
+Gurdy,monster,5,4,1,7C,1,0
+Dark Goblin,monster,2,4,2,2L,0,1
+The Haunt,monster,3,4,1,1L,1,1
+Rage Creep,monster,1,5,1,2L,0,1
+Holy Squirt,monster,2,3,1,2L,0,1
+The Bloat,monster,4,4,2,1L,1,1
+Gurdy Jr.,monster,2,5,1,1T,1,1
+Fatty,monster,4,2,1,1L,0,0
+Holy Digna,monster,3,3,1,xC,0,1
+Horf,monster,1,4,1,3C,0,1
+Satan!,monster,6,4,2,2T,2,1
+Mega Fatty,monster,3,3,1,2L,1,1
+Dark Chest,immediate,0,0,0,0,0,0
+Famine,monster,3,3,1,3L,1,1
+Delirium,monster,5,4,3,2T,0,1
+Gluttony,monster,4,3,1,1L,1,1
+Ring Of Flies,monster,3,3,1,3C,0,1
+Cursed Psy Horf,monster,1,5,1,2L,0,1
+Digna,monster,3,3,1,xC,0,1
+Dark One,monster,3,4,1,1T,1,1
+Gold Chest,immediate,0,0,0,0,0,0
+Cursed Mom's Hand, monster, 2,4,1,4C,0,1
+Larry Jr.,monster,4,3,1,6C,1,1
+Conquest,monster,2,3,1,6C,1,1
+Fly,monster,1,2,1,1C,0,0
+Pooter,monster,2,3,1,1L,0,0
+Boom Fly,monster,1,4,1,4C,0,1
+Greed!,immediate,0,0,0,0,0,0
+Scolex,monster,3,5,1,1T,1,1
+I Can See Forever!,immediate,0,0,0,0,0,0
+War,monster,3,3,1,8C,1,1
+Curse Of The Blind,curse,0,0,0,0,0,0
+Conjoined Fatty,monster,4,3,2,2L,0,0
+Peep,monster,3,4,1,1T,1,1
+Chub,monster,4,3,1,7C,1,1
+Mask Of Infamy,monster,4,4,1,1T,1,1
+Pin,monster,2,4,1,5C,1,1
+We Need To Go Deeper,immediate,0,0,0,0,0,0
+Mom!,monster,5,4,2,1T,2,1
+Swarm of Flies,monster,5,2,1,5C,0,1
+Hopper,monster,2,3,1,3C,0,1
+Pride,monster,2,4,1,5C,1,1
+Sloth,monster,3,4,1,1C,1,1
+Pestilence,monster,4,4,1,1L,1,1
+Shop Upgrade!,immediate,0,0,0,0,0,0
+XL Floor!,immediate,0,0,0,0,0,0
+Keeper Head,monster,2,4,1,xC,0,1
+Cursed Fatty,monster,4,2,1,2L,0,1
+Mom's Hand,monster,2,4,1,4C,0,1
+Pale Fatty,monster,4,3,1,6C,0,0
+Holy Keeper Head,monster,2,4,1,xC,0,1
+Squirt,monster,2,3,1,1L,0,0
+The Duke of Flies,monster,4,3,1,2L,1,1
+Dip,monster,1,4,1,1C,0,0
+Gold Chest,immediate,0,0,0,0,0,0
+Hanger,monster,2,4,2,7C,0,1
+Holy Mom's Eye,monster,1,4,2,1L,0,1
+Cursed Gaper,monster,2,4,1,3C,0,1
+Greedling,monster,2,5,1,7C,0,1
+Clotty,monster,2,3,1,4C,0,0
+Cod Worm,monster,2,5,0,3C,0,0
+Mom's Eye,monster,1,4,2,1L,0,1
+Cursed Horf,monster,1,4,1,3C,0,1
+Chest,immediate,0,0,0,0,0,0
+Troll Bombs,immediate,0,0,0,0,0,0
+Carrion Queen,monster,3,4,1,1T,1,1
+Envy,monster,2,5,1,1C,1,1
+The Lamb,monster,6,3,5,3C,1,1
+Secret Room!,immediate,0,0,0,0,0,0
+Stoney,monster,3,0,0,1L,0,1
+Wizoob,monster,3,5,1,3L,0,1
+Curse of Loss,curse,0,0,0,0,0,0
+Mom's Dead Hand,monster,2,5,1,4C,0,1
+Gemini,monster,3,4,1,5C,1,1
+Curse of Amnesia,curse,0,0,0,0,0,0
+Ambush!,immediate,0,0,0,0,0,0
+Daddy Long Legs,monster,4,4,1,7C,1,1
+Cursed Chest,immediate,0,0,0,0,0,0
+Lust,monster,2,4,1,2L,1,1
+Big Spider,monster,3,4,1,1L,0,1
+Spider,monster,1,4,1,1L,0,0
+---
+name,type,health,defense,swords,reward,souls,bool(effect)
+
+Types:
+monster - any monster
+immediate - triggers immediately
+curse - is a curse BUT not a cursed monster
