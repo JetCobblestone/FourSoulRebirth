@@ -103,10 +103,12 @@ class Game:
             if self.turn == player.id:
                 currentPlayer = player
 
+
+
         currentPlayer.coins += 1
 
-        print(currentPlayer.loot_cards)
-        currentPlayer.loot_cards += draw(1, "loot", currentPlayer)
+        draw(3, "loot", currentPlayer)
+        print(game.loot_deck)
         print(currentPlayer.loot_cards)
 
 

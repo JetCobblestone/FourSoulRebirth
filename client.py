@@ -29,8 +29,6 @@ client.send(str.encode("Ping from " + socket.gethostbyname(socket.gethostname())
 
 packetQueue = []
 listeners = {}
-listeners.setdefault([])
-
 
 def add_listener(function, eventType):
     functions = listeners.setdefault(eventType, [])
@@ -40,21 +38,25 @@ def add_listener(function, eventType):
 
 def receive_packet():
     while True:
-        msg = client.recv(1024).decode()
+        msg = client.recv(1024)
+        if msg.decode() == "":
+            print("received empty string")
+            return
         packetQueue.append(pickle.loads(msg))
 
 
 def sendEvent(event):
-    client.send(str.encode(pickle.dumps(event)))
+    client.send(pickle.dumps(event))
+    print("sent event " + str(event))
 
 
-_thread.start_new_thread(receive_packet(), ())
+_thread.start_new_thread(receive_packet, ())
 
 quit = False
 while not quit:
     while len(packetQueue) != 0:
         event = packetQueue.pop(0)
-        print("received " + event)
-        for listener in listeners.get(event.eventType):
+        print("received " + str(event))
+        for listener in listeners[event.eventType]:
             listener(event)
 

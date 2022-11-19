@@ -2,6 +2,8 @@ import pickle
 import socket as soc
 import _thread
 
+import event
+
 
 class Server:
 
@@ -18,28 +20,31 @@ class Server:
 
         def threaded_client(client):
             while True:
-                try:
-                    msg = client.recv(1024).decode()
+                msg = client.recv(1024)
+                print(msg)
 
-                    if not msg:
-                        print("Client disconnected")
-                        client.close()
-                        break
-                    else:
-                        try:
-                            event = pickle.loads(msg)
-                            if type(event) == "event.Event":
-                                for client2 in self.connections:
-                                    if client2 != client:
-                                        client2.send(str.encode(msg))
-                        except:
-                            pass
-
-
-                except:
+                if not msg:
                     print("Client disconnected")
                     client.close()
                     break
+                else:
+                    success = False
+                    try:
+                        eventObj = pickle.loads(msg)
+                        success = True
+                    except pickle.UnpicklingError:
+                        pass
+                    if success:
+                        print("type: " + str(type(eventObj)))
+                        if isinstance(eventObj, event.Event):
+                            print("received " + str(eventObj))
+                            for client2 in self.connections:
+                                if client2 != client:
+                                    client2.send(msg)
+
+
+
+
 
         while True:
             client, addr = self.socket.accept()
