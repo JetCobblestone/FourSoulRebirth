@@ -25,7 +25,7 @@ while not connected:
     except socket.error:
         print("Could not connect to " + ip + ":" + str(port))
 
-client.send(str.encode("Ping from " + socket.gethostbyname(socket.gethostname())))
+client.send(str.encode("Client " + socket.gethostbyname(socket.gethostname()) + " connected"))
 
 packetQueue = []
 listeners = {}

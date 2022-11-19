@@ -1,96 +1,110 @@
-"A Penny!","coin",1
-"A Penny!","coin",1
-"A Penny!","coin",1
-"A Penny!","coin",1
-"A Penny!","coin",1
-"A Penny!","coin",1
-"2 Cents!","coin",2
-"2 Cents!","coin",2
-"2 Cents!","coin",2
-"2 Cents!","coin",2
-"2 Cents!","coin",2
-"2 Cents!","coin",2
-"2 Cents!","coin",2
-"2 Cents!","coin",2
-"2 Cents!","coin",2
-"2 Cents!","coin",2
-"2 Cents!","coin",2
-"2 Cents!","coin",2
-"3 Cents!","coin",3
-"3 Cents!","coin",3
-"3 Cents!","coin",3
-"3 Cents!","coin",3
-"3 Cents!","coin",3
-"3 Cents!","coin",3
-"3 Cents!","coin",3
-"3 Cents!","coin",3
-"3 Cents!","coin",3
-"3 Cents!","coin",3
-"3 Cents!","coin",3
-"3 Cents!","coin",3
-"3 Cents!","coin",3
-"3 Cents!","coin",3
-"3 Cents!","coin",3
-"4 Cents!","coin",4
-"4 Cents!","coin",4
-"4 Cents!","coin",4
-"4 Cents!","coin",4
-"4 Cents!","coin",4
-"4 Cents!","coin",4
-"4 Cents!","coin",4
-"4 Cents!","coin",4
-"4 Cents!","coin",4
-"A Nickel!","coin",5
-"A Nickel!","coin",5
-"A Nickel!","coin",5
-"A Nickel!","coin",5
-"A Nickel!","coin",5
-"A Dime!!","coin",10
-"Bomb","bomb",1
-"Bomb","bomb",1
-"Bomb","bomb",1
-"Bomb","bomb",1
-"Gold Bomb!!","bomb",3
-"II. The High Priestess","bomb","roll"
-"Pills!","roll","1: 1TSW, 2: 1TSW, 3: 1THP, 4: 1THP, 5: -1THP, 6: -1THP"
-"Pills!","roll","1: Loot 1, 2: Loot 1, 3: Loot 3, 4: Loot 3, 5: Discard 1, 6: Discard 1"
-"Pills!","roll","1: 4C, 2: 4C, 3: 7C, 4: 7C, 5: -4C, 6: -4C"
-"Blank Rune","roll","1: 1C_all, 2: Loot 2_all, 3: -3THP_all, 4: 4C_all, 5: Loot 5_all, 6: 6C_all"
-"X. Wheel of Fortune","roll","1: 1C, 2: -2THP, 3: Loot 3, 4: -4C, 5: 5C, 6: Treasure 1"
-"XVI. The Tower","roll","1: -1THP_all, 2: -1THP_all, 3: -1THP_mons, 4: -1THP_mons, 5: -2THP_all, 6: -2THP_all"
-"Lil Battery","battery",1
-"Lil Battery","battery",1
-"Lil Battery","battery",1
-"Lil Battery","battery",1
-"Mega Battery","battery",999
-"Soul Heart","prevent",1
-"Soul Heart","prevent",1
-"V. The Hierophant","prevent",2
-"IV. The Emperor","scry","monster,5,1"
-"IX. The Hermit","scry","treasure,5,1"
-"XVIII. The Moon","scry","loot,5,1"
-"VII. The Chariot","buff","1SW,1THP"
-"XI. Strength","buff","1TSW,1ATK"
-"VI. The Lovers","buff","2THP"
-"III. The Empress","buff","1TSW,1DIE"
-"Dice Shard","reroll","roll"
-"Dice Shard","reroll","roll"
-"Dice Shard","reroll","roll"
-"I. The Magician","reroll","choice"
-"Lost Soul","unique"
-"Ehwaz","unqiue"
-"Broken Ankh","trinket"
-"Swallowed Penny","trinket"
-"Counterfeit Penny","trinket"
-"Bloody Penny","trinket"
-
-
-
-
-
-
+A Penny!,coin,1
+A Penny!,coin,1
+A Penny!,coin,1
+A Penny!,coin,1
+A Penny!,coin,1
+A Penny!,coin,1
+2 Cents!,coin,2
+2 Cents!,coin,2
+2 Cents!,coin,2
+2 Cents!,coin,2
+2 Cents!,coin,2
+2 Cents!,coin,2
+2 Cents!,coin,2
+2 Cents!,coin,2
+2 Cents!,coin,2
+2 Cents!,coin,2
+2 Cents!,coin,2
+2 Cents!,coin,2
+3 Cents!,coin,3
+3 Cents!,coin,3
+3 Cents!,coin,3
+3 Cents!,coin,3
+3 Cents!,coin,3
+3 Cents!,coin,3
+3 Cents!,coin,3
+3 Cents!,coin,3
+3 Cents!,coin,3
+3 Cents!,coin,3
+3 Cents!,coin,3
+3 Cents!,coin,3
+3 Cents!,coin,3
+3 Cents!,coin,3
+3 Cents!,coin,3
+4 Cents!,coin,4
+4 Cents!,coin,4
+4 Cents!,coin,4
+4 Cents!,coin,4
+4 Cents!,coin,4
+4 Cents!,coin,4
+4 Cents!,coin,4
+4 Cents!,coin,4
+4 Cents!,coin,4
+A Nickel!,coin,5
+A Nickel!,coin,5
+A Nickel!,coin,5
+A Nickel!,coin,5
+A Nickel!,coin,5
+A Dime!!,coin,10
+Bomb,bomb,1
+Bomb,bomb,1
+Bomb,bomb,1
+Bomb,bomb,1
+Gold Bomb!!,bomb,3
+II. The High Priestess,bomb,roll
+Pills!,roll,+1TSW;+1TSW;+1THP;+1THP;+1THP;+1THP
+Pills!,roll,+1L;+1L;+3L;+3L;-1L;-1L
+Pills!,roll,+4C;+4C;+7C;+7C;-4C;-4C
+Blank Rune,roll,+1C_all;+2L_all;-3THP_all;+4C_all;+5L_all;+6C_all
+X. Wheel of Fortune,roll,+1C;-2THP;+3L;-4C;+5C;+1T
+XVI. The Tower,roll,-1THP_all;-1THP_all;-1THP_mons;-1THP_mons;-2THP_all;-2THP_all
+Lil Battery,battery,1
+Lil Battery,battery,1
+Lil Battery,battery,1
+Lil Battery,battery,1
+Mega Battery,battery,999
+Soul Heart,prevent,1
+Soul Heart,prevent,1
+V. The Hierophant,prevent,2
+IV. The Emperor,scry,monster,5,1
+IX. The Hermit,scry,treasure,5,1
+XVIII. The Moon,scry,loot,5,1
+VII. The Chariot,buff,1,1,0,0
+XI. Strength,buff,1,0,1,0
+VI. The Lovers,buff,0,2,0,0
+III. The Empress,buff,1,0,0,1
+Dice Shard,reroll,roll
+Dice Shard,reroll,roll
+Dice Shard,reroll,roll
+I. The Magician,reroll,choice
+Butter Bean!,deny,
+Butter Bean!,deny,
+Butter Bean!,deny,
+Lost Soul,unique,
+Ehwaz,unique,
+Dagaz,unique,
+XVII. The Stars,unique,
+VIII. Justice,unique,
+XV. The Devil,unique,
+0. The Fool,unique,
+XII. The Hanged Man,unique,
+XIV. Temperance,unique,
+XIX. The Sun,unique,
+XX. Judgement,unique,
+XII. Death,unique,
+XXI. The World,unique,
+Guppy's Hairball,trinket,
+Curved Horn,trinket,
+Broken Ankh,trinket,
+Cain's Eye,trinket,
+Purple Heart,trinket,
+Golden Horseshoe,trinket,
+Swallowed Penny,trinket,
+Counterfeit Penny,trinket,
+Bloody Penny,trinket,
 ---
 Glossary:
+(T implies TURN -stat- E.g HP for the current turn. THP is reset to Player HP on each new turn)
 #THP - Adjust HP by # (If # is -ve, take damage)
 #TSW - Adjust swords/attack damage by #
 #ATK- Adjust number of remaining attacks by #

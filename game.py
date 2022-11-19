@@ -1,6 +1,9 @@
 # Receive server updates
 # Code
 import random
+import lootcardfunctions as lcf
+from event import EventType, Event
+import cardoperations as co
 
 class Deck:
     def __init__(self):
@@ -8,23 +11,56 @@ class Deck:
 
     def createDeck(decksize, type):
         # Sets the max size of the deck
+        cards = []
+        if deckType == "loot":
+            with open("textfiles/lootcards.txt", "r") as file:
+                lines = file.readlines()
+                for line in lines:
+                    if line == "---\n":
+                        break
+                    vals = line.split(',')
+                    cardargs = []
+                    for effect in range(2, len(vals)):
+                        cardargs.append(vals[effect])
 
-        if type == "loot":
-            cards = []
-            rawtext = open("textfiles/lootcards.txt")
-            rawtext = rawtext.readlines()
-            for card in rawtext:
-                #Formatting text document
-                card = card.split('"')
-                card = "".join(card)
-                card = card.split(',')
-                for effect in range(2,len(card)):
-                    card[effect] = card[effect].strip("\n")
+                    cardargs[-1] = cardargs[-1].strip("\n")
 
-                cards.append(card)
+                    cards.append(LootCard(vals[0], vals[1], cardargs))
 
-            return cards[0:decksize-1]
-        
+        elif deckType == "treasure":
+            with open("textfiles/treasurecards.txt", "r") as file:
+                lines = file.readlines()
+                for line in lines:
+                    if line == "---\n":
+                        break
+                    vals = line.split(",")
+                    vals[-1] = vals[-1].strip("\n")
+                    cards.append(TreasureCard(vals[0], int(vals[1]), int(vals[2]), int(vals[3]), int(vals[4])))
+
+        elif deckType == "monster":
+            with open("textfiles/monstercards.txt", "r") as file:
+                lines = file.readlines()
+                for line in lines:
+                    if line == "---\n":
+                        break
+                    vals = line.split(',')
+                    vals[-1] = vals[-1].strip("\n")
+
+                    cards.append(MonsterCard(vals[0], vals[1], int(vals[2]), int(vals[3]), int(vals[4]), vals[5], int(vals[6]), int(vals[7])))
+        elif deckType == "character":
+            with open("textfiles/charactercards.txt", "r") as file:
+                lines = file.readlines()
+                for line in lines:
+                    if line == "---\n":
+                        break
+                    vals = line.split(',')
+                    vals[-1] = vals[-1].strip("\n")
+                    cards.append(CharacterCard(vals[0]))
+        else:
+            raise Exception("Invalid deck type")
+
+        return cards[0:decksize-1]
+
 
 class DiscardPile:
     def __init__(self, type):
@@ -52,8 +88,10 @@ class MonsterCard(Card):
 
 
 class LootCard(Card):
-    def __init__(self, name):
+    def __init__(self, name, type, func_args):
         super().__init__(name)
+        self.type = type
+        self.func_args = func_args
 
 
 class CharacterCard(Card):
@@ -74,6 +112,10 @@ class Player:
         self.temp_damage = 0
         self.temp_health = 0
 
+    def playLoot(self, selection):
+        card = self.loot_cards[selection]
+        lcf.cardtype(card, self)
+
 
 class Game:
     def __init__(self, players):
@@ -89,42 +131,68 @@ class Game:
 
     def createDecks(self):
 
-        #Instantiate loot deck and shuffle
-        self.loot_deck = Deck.createDeck(48, "loot")
+        # Instantiate decks and shuffle
+        self.loot_deck = Deck().createDeck(104, "loot")
         random.shuffle(self.loot_deck)
+        self.treasure_deck = Deck().createDeck(105, "treasure")
+        random.shuffle(self.treasure_deck)
+        self.monster_deck = Deck().createDeck(107,"monster")
+        random.shuffle(self.monster_deck)
+        self.character_deck = Deck().createDeck(18, "character")
+        random.shuffle(self.character_deck)
 
-        #Start the game
-        self.main_loop()
+        responses = {}
+
+        # Called when a response is received
+        def choicesMade(eventObj):
+            responses[eventObj.data[0]] = eventObj.data[1]
+            if len(responses) != len(self.players):
+                return
+
+            # Give player starting loot cards
+            for player in self.players:
+                co.draw(3, "loot", player)
+
+            # Start the game
+            self.main_loop()
+
+        server.addListener(EventType.SERVERBOUND_CHARACTER_CHOICE, choicesMade)
+
+        # Players make character selection
+        for i in range(len(self.players)):
+            player = self.players[i]
+            server.sendEvent(player.client, Event(EventType.CLIENTBOUND_CHARACTER_CHOICE, [self.character_deck[(3*i)], self.character_deck[(3*i)+1], self.character_deck[(3*i)+2]]))
 
     def main_loop(self):
+
+        if self.turn > len(self.players):
+            self.turn = 1
+
+
 
         currentPlayer = None
         for player in self.players:
             if self.turn == player.id:
                 currentPlayer = player
 
+        self.turn += 1
 
+        currentPlayer.freecardplayed = False
 
         currentPlayer.coins += 1
 
-        draw(3, "loot", currentPlayer)
-        print(game.loot_deck)
-        print(currentPlayer.loot_cards)
+        co.draw(1, "loot", currentPlayer)
 
-
-def draw(n, deck, player=None):
-    global game
-    # Draw n cards
-
-    if deck == "Monster":
-        pass
-
-    elif deck == "Treasure":
-        pass
-
-    else:  # For loot cards
-        for i in range(0,n):
-            player.loot_cards.append(game.loot_deck.pop())
+        while True:
+            playcard = input("Play lootcard? Y/N: ")
+            if playcard == "Y":
+                card = co.chooseLootCard(currentPlayer)
+                lcf.cardtype(card, currentPlayer)
+                break
+            if playcard == "N":
+                break
+            else:
+                pass
 
 
 

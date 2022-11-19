@@ -1,8 +1,9 @@
 import pickle
 import socket as soc
 import _thread
+from game import createGame
 
-import event
+import event as Event
 
 
 class Server:
@@ -20,31 +21,50 @@ class Server:
 
         def threaded_client(client):
             while True:
-                msg = client.recv(1024)
-                print(msg)
-
+                try:
+                    msg = client.recv(1024)
+                    print(msg)
+                except:
+                    print("Connection " + client.getsockname()[0] + " closed")
+                    self.connections.remove(client)
+                    client.close()
+                    return
                 if not msg:
-                    print("Client disconnected")
+                    print("Client " +client.getsockname()[0]+ " disconnected")
+                    self.connections.remove(client)
                     client.close()
                     break
+
                 else:
                     success = False
                     try:
                         eventObj = pickle.loads(msg)
                         success = True
                     except pickle.UnpicklingError:
-                        pass
+                        print("failed to unpickle")
                     if success:
-                        print("type: " + str(type(eventObj)))
-                        if isinstance(eventObj, event.Event):
+                        print(eventObj)
+                        if isinstance(eventObj, Event.Event):
                             print("received " + str(eventObj))
-                            for client2 in self.connections:
-                                if client2 != client:
-                                    client2.send(msg)
+                            self.eventQueue.append(eventObj)
+
+        def acceptConnection():
+            while True:
+                client, addr = self.socket.accept()
+                self.connections.append(client)
+                _thread.start_new_thread(threaded_client, (client,))
+
+        self.addListener(Event.EventType.SERVERBOUND_CLIENT_JOIN, lambda event : createGame(self))
+
+        _thread.start_new_thread(acceptConnection, ())
 
 
-
-
+        quit = False
+        while not quit:
+            if len(self.eventQueue) > 0:
+                event = self.eventQueue.pop()
+                for function in self.listeners.setdefault(event.eventType, []):
+                    function(event)
 
         while True:
             client, addr = self.socket.accept()
