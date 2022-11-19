@@ -1,0 +1,107 @@
+Dinner,1,0,0,0
+Box!,0,1,0,0
+Greed's Gullet,1,0,0,0
+Shiny Rock,1,0,0,0
+Charged Baby,1,0,0,0
+Polydactyly,1,0,0,0
+Champion Belt,1,0,0,0
+Dead Bird,1,0,0,0
+Stack Of Pennies,1,1,0,0
+Crystal Ball,0,1,0,0
+Jawbone,0,1,0,0
+Pandora's Box,0,1,0,0
+The Polaroid,1,0,0,0
+Ipecac,1,0,0,0
+Donation Machine,0,0,1,0
+Restock,1,0,0,0
+Trinity Shield,1,0,0,0
+Lucky Foot,0,1,0,0
+The Battery,0,1,0,0
+Remote Detonator,0,1,0,0
+The Blue Map,1,0,0,0
+Curse of The Tower,1,0,0,0
+Finger,1,0,0,0
+Guppy's Paw,0,1,0,1
+Guppy's Collar,1,0,0,1
+Golden Razor Blade,0,0,1,0
+Belly Button,1,0,0,0
+Potato Peeler,0,1,0,0
+Chaos Card,0,1,0,0
+Shadow,1,0,0,0
+The D20,0,1,0,0
+Placebo,0,1,0,0
+Mom's Purse,1,0,0,0
+Sacred Heart,1,0,0,0
+Goat Head,1,0,0,0
+Spoon Bender,0,1,0,0
+Host Hat,0,1,0,0
+Bum-Bo!,1,0,0,0
+The D4,0,1,0,0
+Razor Blade,0,1,0,0
+There's Options,1,0,0,0
+The Relic,1,0,0,0
+The Shovel,0,1,0,0
+Monster Manual,0,1,0,0
+Mini Mush,0,1,0,0
+The Midas Touch,1,0,0,0
+Modeling Clay,0,1,0,0
+Breakfast,1,0,0,0
+Spide Mod,1,0,0,0
+Daddy Haunt,1,0,0,0
+Chaos,0,1,0,0
+Flush,0,1,0,0
+Monstro's Tooth,1,0,0,0
+Steamy Sale!,1,0,0,0
+The Chest,1,0,0,0
+Suicide King,1,0,0,0
+Dark Bum,1,0,0,0
+Baby Haunt,1,0,0,0
+Compass,1,0,0,0
+Starter Deck,1,0,0,0
+Mom's Box,1,0,0,0
+Mom's Coin Purse,1,0,0,0
+Eden's Blessing,1,0,0,0
+Mom's Razor,1,0,0,0
+Dry Baby,1,0,0,0
+The Dead Cat,1,0,0,1
+Cheese Grater,1,0,0,0
+Bob's Brain,1,0,0,0
+The Map,1,0,0,0
+Brimstone,1,0,0,0
+Meat!,1,0,0,0
+Fanny Pack,1,0,0,0
+Tarot Cloth,1,0,0,0
+The D10,1,0,0,0
+The Habit,1,0,0,0
+Synthoil,1,0,0,0
+Eye of Greed,1,0,0,0
+Empty Vessel,1,0,0,0
+Cambion Conception,1,0,0,0
+Dad's Lost Coin,1,0,0,0
+Mystery Sack,0,1,0,0
+Compost,0,1,0,0
+Two of Clubs,0,1,0,0
+Bum Friend,0,1,0,0
+Mr Boom,0,1,0,0
+Boomerang,0,1,0,0
+Smelter,0,0,1,0
+Godhead,0,1,0,0
+Battery Bum,0,0,1,0
+Mom's Shovel,0,1,0,0
+Book of Sin,0,1,0,0
+Decoy,0,1,0,0
+Guppy's Head,0,1,0,1
+Tech X,0,1,1,0
+Sack Head,0,1,0,0
+Contract from Below,0,0,1,0
+Pay to Play,0,0,1,0
+No!,0,1,0,0
+The D100,0,1,0,0
+Blank Card,0,1,0,0
+Portable Slot Machine,0,0,1,0
+Mom's Bra,0,1,0,0
+Glass Cannon,0,1,0,0
+Diplopia,0,1,0,0
+The Poop,1,1,0,0
+---
+format: name,bool(passive effect),bool(tap effect),bool(spend effect),bool(guppy)

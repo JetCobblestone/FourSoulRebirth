@@ -5,11 +5,13 @@ import lootcardfunctions as lcf
 from event import EventType, Event
 import cardoperations as co
 
+
 class Deck:
+
     def __init__(self):
         pass
 
-    def createDeck(decksize, type):
+    def createDeck(self, decksize, deckType):
         # Sets the max size of the deck
         cards = []
         if deckType == "loot":
@@ -83,7 +85,15 @@ class TreasureCard(Card):
 
 
 class MonsterCard(Card):
-    def __init__(self, name):
+    def __init__(self, name, type, health, defence, swords, reward, souls, effectBool):
+        self.type = type
+        self.health = health
+        self.turn_hp = health
+        self.defence = defence
+        self.swords = swords
+        self.reward = reward
+        self.souls = souls
+        self.effectBool = effectBool
         super().__init__(name)
 
     def take_damage(self, turn_hp, damage):
@@ -104,7 +114,7 @@ class CharacterCard(Card):
 
 
 class Player:
-    def __init__(self, id):
+    def __init__(self, id, client):
         self.coins = 3
         self.loot_cards = []
         self.treasure_cards = []
@@ -115,6 +125,7 @@ class Player:
         self.damage = 1
         self.temp_damage = 0
         self.temp_health = 0
+        self.client = client
 
     def playLoot(self, selection):
         card = self.loot_cards[selection]
@@ -122,18 +133,22 @@ class Player:
 
 
 class Game:
-    def __init__(self, players):
+    def __init__(self, players, server):
         # Generate Decks as objects
+        self.loot_deck = None
+        self.treasure_deck = None
+        self.monster_deck = None
+        self.character_deck = None
+        self.active_monsters = []
+        self.active_shop = []
 
         # Create for n players. Works for up to 6 players
         self.players = []
         for i in range(0, players):
-            self.players.append(Player(i+1))  # i is the player id
+            self.players.append(Player(i+1, server.connections[i]))  # i is the player id
 
         # Current player's turn. Starts as turn = 1, as player 1 goes first. Number represents the player.
         self.turn = 1
-
-    def createDecks(self):
 
         # Instantiate decks and shuffle
         self.loot_deck = Deck().createDeck(104, "loot")
