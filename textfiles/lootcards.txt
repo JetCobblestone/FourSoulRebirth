@@ -1,0 +1,101 @@
+"A Penny!","coin",1
+"A Penny!","coin",1
+"A Penny!","coin",1
+"A Penny!","coin",1
+"A Penny!","coin",1
+"A Penny!","coin",1
+"2 Cents!","coin",2
+"2 Cents!","coin",2
+"2 Cents!","coin",2
+"2 Cents!","coin",2
+"2 Cents!","coin",2
+"2 Cents!","coin",2
+"2 Cents!","coin",2
+"2 Cents!","coin",2
+"2 Cents!","coin",2
+"2 Cents!","coin",2
+"2 Cents!","coin",2
+"2 Cents!","coin",2
+"3 Cents!","coin",3
+"3 Cents!","coin",3
+"3 Cents!","coin",3
+"3 Cents!","coin",3
+"3 Cents!","coin",3
+"3 Cents!","coin",3
+"3 Cents!","coin",3
+"3 Cents!","coin",3
+"3 Cents!","coin",3
+"3 Cents!","coin",3
+"3 Cents!","coin",3
+"3 Cents!","coin",3
+"3 Cents!","coin",3
+"3 Cents!","coin",3
+"3 Cents!","coin",3
+"4 Cents!","coin",4
+"4 Cents!","coin",4
+"4 Cents!","coin",4
+"4 Cents!","coin",4
+"4 Cents!","coin",4
+"4 Cents!","coin",4
+"4 Cents!","coin",4
+"4 Cents!","coin",4
+"4 Cents!","coin",4
+"A Nickel!","coin",5
+"A Nickel!","coin",5
+"A Nickel!","coin",5
+"A Nickel!","coin",5
+"A Nickel!","coin",5
+"A Dime!!","coin",10
+"Bomb","bomb",1
+"Bomb","bomb",1
+"Bomb","bomb",1
+"Bomb","bomb",1
+"Gold Bomb!!","bomb",3
+"II. The High Priestess","bomb","roll"
+"Pills!","roll","1: 1TSW, 2: 1TSW, 3: 1THP, 4: 1THP, 5: -1THP, 6: -1THP"
+"Pills!","roll","1: Loot 1, 2: Loot 1, 3: Loot 3, 4: Loot 3, 5: Discard 1, 6: Discard 1"
+"Pills!","roll","1: 4C, 2: 4C, 3: 7C, 4: 7C, 5: -4C, 6: -4C"
+"Blank Rune","roll","1: 1C_all, 2: Loot 2_all, 3: -3THP_all, 4: 4C_all, 5: Loot 5_all, 6: 6C_all"
+"X. Wheel of Fortune","roll","1: 1C, 2: -2THP, 3: Loot 3, 4: -4C, 5: 5C, 6: Treasure 1"
+"XVI. The Tower","roll","1: -1THP_all, 2: -1THP_all, 3: -1THP_mons, 4: -1THP_mons, 5: -2THP_all, 6: -2THP_all"
+"Lil Battery","battery",1
+"Lil Battery","battery",1
+"Lil Battery","battery",1
+"Lil Battery","battery",1
+"Mega Battery","battery",999
+"Soul Heart","prevent",1
+"Soul Heart","prevent",1
+"V. The Hierophant","prevent",2
+"IV. The Emperor","scry","monster,5,1"
+"IX. The Hermit","scry","treasure,5,1"
+"XVIII. The Moon","scry","loot,5,1"
+"VII. The Chariot","buff","1SW,1THP"
+"XI. Strength","buff","1TSW,1ATK"
+"VI. The Lovers","buff","2THP"
+"III. The Empress","buff","1TSW,1DIE"
+"Dice Shard","reroll","roll"
+"Dice Shard","reroll","roll"
+"Dice Shard","reroll","roll"
+"I. The Magician","reroll","choice"
+"Lost Soul","unique"
+"Ehwaz","unqiue"
+"Broken Ankh","trinket"
+"Swallowed Penny","trinket"
+"Counterfeit Penny","trinket"
+"Bloody Penny","trinket"
+
+
+
+
+
+
+---
+Glossary:
+#THP - Adjust HP by # (If # is -ve, take damage)
+#TSW - Adjust swords/attack damage by #
+#ATK- Adjust number of remaining attacks by #
+#DIE - Adjust all dice rolls by number
+Loot # - Draw # loot cards
+Discard # - Discard # loot card from hand
+Treasure # - Draw a treasure card or pick one from the store until you have gained # treasures
+#C - Gain # coins (if # is -ve, lose coins)
