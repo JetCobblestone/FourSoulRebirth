@@ -103,7 +103,7 @@ class MonsterCard(Card):
 
     def attack_monster(self, player, defense, turn_hp, game):
         player.sendMessage("Press enter to roll")
-        player.getChoice()
+        player.getChoice(["-"])
         player_attack = dice.dice()
         # ADD MODIFIERS --------------------------------------------------------------------------------------------------
         if mcf.nodamage(self, player_attack) and self.effectBool == 1:
@@ -357,7 +357,7 @@ class Player:
         server.sendEvent(self.client, Event(EventType.CLIENTBOUND_SEND_MESSAGE, [message]))
 
     def getValue(self):
-        server.sendEvent(self.Client, Event(EventType.CLIENTBOUND_VALUE_REQUEST, []))
+        server.sendEvent(self.client, Event(EventType.CLIENTBOUND_VALUE_REQUEST, []))
         response = []
         def onResponse(event):
             response.append(event.data[0])
@@ -447,16 +447,13 @@ class Game:
         while True:
             currentPlayer.sendMessage("Play loot card?")
             playcard = currentPlayer.getChoice(["Y","N"])
-            print(playcard)
             if playcard == 0:
-                print("0 was selected")
                 card = co.chooseLootCard(currentPlayer)
                 lcf.cardtype(card, currentPlayer, self)
                 currentPlayer.loot_cards.remove(card)
                 currentPlayer.freecardplayed = True
                 break
             if playcard == 1:
-                print("1 was selected")
                 break
             else:
                 pass
@@ -464,7 +461,7 @@ class Game:
         if not currentPlayer.dead:
             if currentPlayer.freecardplayed:
                 while True:
-                    self.sendMessage("Play loot card? [Y/N]: ")
+                    currentPlayer.sendMessage("Play loot card? [Y/N]: ")
                     playcard = currentPlayer.getChoice(["Y", "N"])
                     if playcard == 0:
                         card = co.chooseLootCard(currentPlayer)
@@ -498,11 +495,10 @@ class Game:
                             while int(which_item) > len(choices):
                                 currentPlayer.sendMessage("Select Item [0-"+str(len(choices)-1)+"]: ")
                                 vals = []
-                                vals.append("Off the top")
                                 for i in range(len(choices)):
-                                    vals.append(choices[i].name)
+                                    vals.append(choices[i])
                         
-                                which_item = player.getChoice()
+                                which_item = player.getChoice(vals)
                                 if which_item == "0":
                                     currentPlayer.treasure_cards.append(self.treasure_deck.pop())
                                     currentPlayer.coins -= 10
@@ -528,7 +524,7 @@ class Game:
                 self.checkMonsterSlots()
                 currentPlayer.sendMessage("Active Monsters:")
                 for slot in self.active_monsters:
-                    currentPlayer.sendMessage("Name:", str(slot[-1].name)+",", "Health:", str(slot[-1].health)+",", "Required Roll:", str(slot[-1].defence)+",", "Attack power:", str(slot[-1].swords)+",", "Rewards:", str(slot[-1].reward)+",",  "Souls:", str(slot[-1].souls))
+                    currentPlayer.sendMessage("Name: " + str(slot[-1].name)+", " + "Health: " + str(slot[-1].health) + "," + " Required Roll: " + str(slot[-1].defence)+", " + "Attack power: " + str(slot[-1].swords)+", " + "Rewards: " + str(slot[-1].reward)+", " + "Souls: " + str(slot[-1].souls))
 
                 currentPlayer.sendMessage("-")
                 while True and not currentPlayer.dead:
