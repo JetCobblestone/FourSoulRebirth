@@ -103,7 +103,7 @@ class MonsterCard(Card):
         input("Press enter to roll")
         player_attack = dice.dice()
         # ADD MODIFIERS --------------------------------------------------------------------------------------------------
-        if mcf.nodamage(self, player_attack):
+        if mcf.nodamage(self, player_attack) and self.effectBool == 1:
             return False
 
         if player_attack >= defense:
@@ -444,7 +444,8 @@ class Game:
                                 combat_ended = monster.attack_monster(currentPlayer, monster.defence, monster.health, self)
                                 if combat_ended == "m":
                                     print("Monster defeated")
-                                    self.active_monsters[int(which_monster)-1].pop()
+                                    game.monster_discard.append(self.active_monsters[int(which_monster)-1].pop())
+
                                     self.checkMonsterSlots()
                                     break
                                 elif combat_ended == "p":
