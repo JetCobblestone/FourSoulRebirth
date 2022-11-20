@@ -19,6 +19,7 @@ def cardtype(card, player, game):
         for target in targets:
             try:
                 print(target.name)
+
             except:
                 print(target.id)
 
@@ -48,13 +49,14 @@ def cardtype(card, player, game):
         pass
 
     elif card.type == "scry":
-        pass
+        scry(card.func_args, game)
 
     elif card.type == "buff":
         pass
 
     elif card.type == "reroll":
-        pass
+        # Doesn't worka atm, also useless as loot cards can only be played at the start of a turn
+        reroll(card.func_args)
 
     elif card.type == "deny":
         pass
@@ -132,8 +134,18 @@ def roll(player, args, game):
 
     # GUPPY outcome:
     elif rolledElement[2:] == "GUPPY":
-        # Find first Guppy in Treasure deck, give to player
-        pass
+        deck = game.treasure_deck
+        card = None
+        for i in range(len(deck) - 1, 0, -1):
+            card1 = deck[i]
+            if card1.guppy:
+                card = card1
+        if card is None:
+            print("No guppy card")
+        else:
+            player.treasure_cards.append(card)
+            game.treasure_deck.remove(card)
+        player.takeDamage(2)
 
     else:
         pass
@@ -162,3 +174,36 @@ def reroll(args):
 
     else:
         print("INVALID")
+
+
+def scry(args, game):
+
+    deck = args[0]
+    lookat = args[1]
+    ontop = args[2]
+
+    # Initialise arrays
+    scry_array = []
+    ontop_array = []
+    onbottom_array = []
+
+    # Look at the designated num of values
+    for i in range(0, lookat):
+        scry_array.append = game.deck.pop()
+
+    # Need to change so all players don't see it
+    print(scry_array)
+    # Player inputs their scry code
+    scry_code = input("Enter a scry code as a list of indexes with no spaces: ")
+
+    for i in range(len(scry_array)):
+        if i < ontop:
+            # Places the first ontop values in the array placed on the top of the deck
+            ontop_array.append(scry_array[int(scry_code[i])])
+        else:
+            # The rest go on the bottom
+            onbottom_array.append(scry_array[int(scry_code[i])])
+
+    # Recreates deck with the scried cards. I'm sCRYING right now.
+    deck = onbottom_array + deck + reversed(ontop_array)
+    return deck

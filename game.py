@@ -88,10 +88,10 @@ class TreasureCard(Card):
 
 
 class MonsterCard(Card):
-    def __init__(self, name, type, health, defence, swords, reward, souls, effectBool):
+    def __init__(self, name, type, maxhealth, defence, swords, reward, souls, effectBool):
         self.type = type
-        self.health = health
-        self.turn_hp = health
+        self.maxhealth = maxhealth
+        self.health = maxhealth
         self.defence = defence
         self.swords = swords
         self.reward = reward
@@ -189,7 +189,7 @@ class MonsterCard(Card):
                 outcomes = "+1L;+1L;+3C;+3C;-2THP;-2THP"
 
             elif card.name == "Cursed Chest":
-                outcomes = "-1THP;-1THP;-1THP;-2THP;-2THP;--GUPPY"  # <----------------- GUPPY
+                outcomes = "-1THP;-1THP;-1THP;-2THP;-2THP;--GUPPY"
 
             elif card.name == "Secret Room!":
                 outcomes = "-3THP;-2L;-2L;+7C;+7C;+1T"
@@ -226,6 +226,7 @@ class MonsterCard(Card):
             else:
                 print(card.name)
                 print("Card name not found ^")
+
 
 class LootCard(Card):
     def __init__(self, name, type, func_args):
@@ -268,7 +269,7 @@ class Game:
         self.monster_deck = []
         self.monster_discard = []
         self.character_deck = []
-        self.active_monsters = [[],[]]
+        self.active_monsters = [[], []]
         self.active_shop = []
 
         # Create for n players. Works for up to 6 players
@@ -284,7 +285,7 @@ class Game:
         random.shuffle(self.loot_deck)
         self.treasure_deck = Deck().createDeck(105, "treasure")
         random.shuffle(self.treasure_deck)
-        self.monster_deck = Deck().createDeck(107,"monster")
+        self.monster_deck = Deck().createDeck(107, "monster")
         random.shuffle(self.monster_deck)
         self.character_deck = Deck().createDeck(18, "character")
         random.shuffle(self.character_deck)

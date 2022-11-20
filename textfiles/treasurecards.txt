@@ -104,4 +104,11 @@ Glass Cannon,0,1,0,0
 Diplopia,0,1,0,0
 The Poop,1,1,0,0
 ---
-format: name,bool(passive effect),bool(tap effect),bool(spend effect),bool(guppy)
+format: name,trigger,bool(passive effect),bool(tap effect),bool(spend effect),bool(guppy)
+
+triggers:
+gpassive - general passives
+ondeath - when the owner dies
+ondamage - when the owner takes damage
+eot - when the owner's turn ends
+sot - when the owner's turn starts
