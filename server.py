@@ -43,9 +43,11 @@ class Server:
                     except pickle.UnpicklingError:
                         print(msg)
                     if success:
+                        print("got message")
                         if isinstance(eventObj, Event.Event):
                             print("recieved " + str(eventObj.eventType))
                             self.sendEvent(client, Event.Event(Event.EventType.CLIENTBOUND_PACKET_RECIEVED, [True]))
+                            eventObj.setSource = client
                             self.eventQueue.append(eventObj)
 
         def acceptConnection():

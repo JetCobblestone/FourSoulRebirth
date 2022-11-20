@@ -69,10 +69,18 @@ def setLastReceived(event):
 def test(event):
     sendEvent(Event(EventType.SERVERBOUND_CHARACTER_CHOICE, [0,event.data[0]]))
 
+def onChoiceRequest(event):
+    choices = event.data[0]
+    for i in len(choices):
+        print(str(i) + ") " + choices[i])
+    choice = input("Enter your choice")
+    sendEvent(Event(EventType.SERVERBOUND_RESPOND_CHOICE, [choice]))
+
 _thread.start_new_thread(receive_packets, ())
 _thread.start_new_thread(send_packets, ())
 addListener(EventType.CLIENTBOUND_PACKET_RECIEVED, setLastReceived)
 addListener(EventType.CLIENTBOUND_CHARACTER_CHOICE, test)
+addListener(EventType.CLIENTBOUND_REQUEST_CHOICE, onChoiceRequest)
 sendEvent(Event(EventType.SERVERBOUND_CLIENT_JOIN, []))
 
 
