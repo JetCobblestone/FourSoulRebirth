@@ -1,5 +1,4 @@
-def draw(n, deck, player=None):
-    global game
+def draw(n, deck, player, game):
     # Draw n cards
 
     if deck == "Monster":
@@ -11,6 +10,9 @@ def draw(n, deck, player=None):
     else:  # For loot cards
         for i in range(0, n):
             player.loot_cards.append(game.loot_deck.pop())
+        print("Setup Done")
+
+
 
 
 def chooseLootCard(player):

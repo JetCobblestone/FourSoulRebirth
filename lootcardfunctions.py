@@ -2,9 +2,7 @@ import dice
 import cardoperations as co
 
 
-def cardtype(card, player):
-    global game
-
+def cardtype(card, player, game):
     if card.type == "coin":
         player.coins += coin(card.func_args)
         print(player.coins)
@@ -12,14 +10,30 @@ def cardtype(card, player):
     elif card.type == "bomb":
         print("Choose target: ")
 
-        targets = game.players + game.active_monsters
-        target_choice = input()
+        targets = []
+        for player in game.players:
+            targets.append(player)
+        for monster_stack in game.active_monsters:
+            targets.append(monster_stack[-1])
+
+        for target in targets:
+            try:
+                print(target.name)
+            except:
+                print(target.id)
+
+        target_choice = int(input())
         target = targets[target_choice]
-        target.turn_hp -= bomb(card.func_args)
-        # target.checkdead()
+        print(type(target))
+        if str(type(target)) == "<class '__main__.Player'>":
+            pass
+        else:
+            target.take_damage(bomb(card.func_args))
+        # if target = monster, monster damage
+        # else player damage
 
     elif card.type == "roll":
-        roll(player, card.func_args)
+        roll(player, card.func_args, game)
 
     elif card.type == "battery":
         pass
@@ -54,7 +68,6 @@ def coin(args):
 
 
 def bomb(args):
-
     try:
         int(args[0])
 
@@ -66,9 +79,9 @@ def bomb(args):
         return int(args[0])
 
 
-def roll(player, args):
+def roll(player, args, game):
     elements = args.split(";")
-    rolledElement = elements[dice.dice()-1]
+    rolledElement = elements[dice.dice() - 1]
 
     # Roll decoder:
     # Read [:2] to determine magnitude of effect
@@ -91,28 +104,34 @@ def roll(player, args):
     # Loot Card outcome:
     elif rolledElement[2:] == "L":
         if rolledElement[0] == "+":
-            co.draw(rolledElement[1], "loot", player)
+            co.draw(rolledElement[1], "loot", player, game)
 
         elif rolledElement[0] == "-":
-                co.discardLoot(player)
+            co.discardLoot(player)
 
         else:
             print("MISSING ADD/SUB")
 
     # Treasure outcome:
     elif rolledElement[2:] == "T":
-        co.draw(1, "treasure", player)
+        co.draw(1, "treasure", player, game)
 
     # TSW outcome:
 
     # THP outcome:
 
     # _all decoder:
-    elif rolledElement[-3:-1] == "all":
+    elif rolledElement[-3:] == "all":
+        pass
+
+    # GUPPY outcome:
+    elif rolledElement[2:] == "GUPPY":
+        # Find first Guppy in Treasure deck, give to player
         pass
 
     else:
         pass
+
 
 def reroll(args):
     if args[0] == "roll":
@@ -137,4 +156,3 @@ def reroll(args):
 
     else:
         print("INVALID")
-        
