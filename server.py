@@ -25,7 +25,6 @@ class Server:
             while True:
                 try:
                     msg = client.recv(1024)
-                    print(msg)
                 except:
                     print("Connection " + client.getsockname()[0] + " closed")
                     self.connections.remove(client)
@@ -36,18 +35,17 @@ class Server:
                     self.connections.remove(client)
                     client.close()
                     break
-
                 else:
                     success = False
                     try:
                         eventObj = pickle.loads(msg)
                         success = True
                     except pickle.UnpicklingError:
-                        print("failed to unpickle")
+                        print(msg)
                     if success:
-                        print(eventObj)
                         if isinstance(eventObj, Event.Event):
-                            print("received " + str(eventObj))
+                            print("recieved " + str(eventObj.eventType))
+                            self.sendEvent(client, Event.Event(Event.EventType.CLIENTBOUND_PACKET_RECIEVED, [True]))
                             self.eventQueue.append(eventObj)
 
         def acceptConnection():
@@ -74,8 +72,10 @@ class Server:
         self.socket.close()
 
     def sendEvent(self, client, event):
+        print("sent " + str(event.eventType))
         client.send(pickle.dumps(event))
 
     def addListener(self, event, function):
         vals = self.listeners.setdefault(event, [])
-        self.listeners[event] = vals.append(function)
+        vals.append(function)
+        self.listeners[event] = vals

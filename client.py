@@ -27,7 +27,8 @@ while not connected:
 
 client.send(str.encode("Client " + socket.gethostbyname(socket.gethostname()) + " connected"))
 
-packetQueue = []
+packetInQueue = []
+packetOutQueue = []
 listeners = {}
 
 def addListener(eventType, function):
@@ -35,30 +36,51 @@ def addListener(eventType, function):
     functions.append(function)
     listeners[eventType] = functions
 
+lastReceived = False
 
-def receive_packet():
+def receive_packets():
     while True:
         msg = client.recv(1024)
         if msg == b'':
             print("received empty string")
             return
-        packetQueue.append(pickle.loads(msg))
+        event = pickle.loads(msg)
+        print("received " + str(event.eventType))
+        packetInQueue.append(event)
 
+def send_packets():
+    global lastReceived
+    while True:
+        if len(packetOutQueue) != 0:
+            event = packetOutQueue.pop(0)
+            client.send(pickle.dumps(event))
+            print("sent event " + str(event.eventType))
+            lastReceived = False
+            while lastReceived == False:
+                pass
 
 def sendEvent(event):
-    client.send(pickle.dumps(event))
-    print("sent event " + str(event))
+    packetOutQueue.append(event)
 
+def setLastReceived(event):
+    global lastReceived
+    lastReceived = event.data[0]
 
-_thread.start_new_thread(receive_packet, ())
-addListener(EventType.SERVERBOUND_CHARACTER_CHOICE, lambda event : event.data[0])
+def test(event):
+    sendEvent(Event(EventType.SERVERBOUND_CHARACTER_CHOICE, [0,event.data[0]]))
+
+_thread.start_new_thread(receive_packets, ())
+_thread.start_new_thread(send_packets, ())
+addListener(EventType.CLIENTBOUND_PACKET_RECIEVED, setLastReceived)
+addListener(EventType.CLIENTBOUND_CHARACTER_CHOICE, test)
 sendEvent(Event(EventType.SERVERBOUND_CLIENT_JOIN, []))
+
 
 
 quit = False
 while not quit:
-    while len(packetQueue) != 0:
-        event = packetQueue.pop(0)
-        print("received " + str(event))
+    while len(packetInQueue) != 0:
+        event = packetInQueue.pop(0)
         for listener in listeners.setdefault(event.eventType, []):
             listener(event)
+

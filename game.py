@@ -164,7 +164,7 @@ class Game:
 
         # Called when a response is received
         def choicesMade(eventObj):
-            responses[eventObj.data[0]] = eventObj.data[1]
+            responses[str(eventObj.data[0])] = eventObj.data[1]
             if len(responses) != len(self.players):
                 return
 
