@@ -266,7 +266,7 @@ class Game:
 
             # Give player starting loot cards
             for player in self.players:
-                co.draw(3, "loot", player)
+                co.draw(3, "loot", player, game)
 
             for slot in self.active_monsters:
                 while True:
@@ -305,7 +305,7 @@ class Game:
 
         currentPlayer.coins += 1
 
-        co.draw(1, "loot", currentPlayer)
+        co.draw(1, "loot", currentPlayer, game)
 
         while True:
             playcard = input("Play lootcard? Y/N: ")
