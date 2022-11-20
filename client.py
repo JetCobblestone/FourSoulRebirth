@@ -77,11 +77,17 @@ def onChoiceRequest(event):
 
     sendEvent(Event(EventType.SERVERBOUND_CHOICE_RESPONSE, [choice]))
 
+
+
+def onReceiveMessage(event):
+    print(event.data[0])
+
 _thread.start_new_thread(receive_packets, ())
 _thread.start_new_thread(send_packets, ())
 addListener(EventType.CLIENTBOUND_PACKET_RECIEVED, setLastReceived)
 addListener(EventType.CLIENTBOUND_CHARACTER_CHOICE, test)
 addListener(EventType.CLIENTBOUND_CHOICE_REQUEST, onChoiceRequest)
+addListener(EventType.CLIENTBOUND_SEND_MESSAGE, onReceiveMessage)
 sendEvent(Event(EventType.SERVERBOUND_CLIENT_JOIN, []))
 
 

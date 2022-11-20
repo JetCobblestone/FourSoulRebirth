@@ -43,12 +43,10 @@ class Server:
                     except pickle.UnpicklingError:
                         print(msg)
                     if success:
-                        print("got message")
                         if isinstance(eventObj, Event.Event):
                             print("recieved " + str(eventObj.eventType))
                             self.sendEvent(client, Event.Event(Event.EventType.CLIENTBOUND_PACKET_RECIEVED, [True]))
                             eventObj.setSource = client
-                            print
                             self.eventQueue.append(eventObj)
 
         def acceptConnection():
@@ -57,10 +55,16 @@ class Server:
                 self.connections.append(client)
                 _thread.start_new_thread(threaded_client, (client,))
 
+        def onClientJoin(event):
+            for client in self.connections:
+                self.sendEvent(client, Event.Event(Event.EventType.CLIENTBOUND_SEND_MESSAGE), ["A player joined"])
+            if len(self.connections) == 1:
+                self.sendEvent(event.getSource, Event.Event(Event.EventType.CLIENTBOUND_CHOICE_REQUEST, ["Start game"]))
+                self.addListener(Event.EventType.SERVERBOUND_CHOICE_RESPONSE, onStart)
+
+        def onStart(event):
+            self.listeners[Event.EventType.SERVERBOUND_CHOICE_RESPONSE] = []
         
-
-        self.addListener(Event.EventType.SERVERBOUND_CLIENT_JOIN, lambda event : createGame(self))
-
 
         _thread.start_new_thread(acceptConnection, ())
 

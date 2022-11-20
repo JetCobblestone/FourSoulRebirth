@@ -354,6 +354,19 @@ class Player:
     def sendMessage(self, message):
         server.sendEvent(self.client, Event(EventType.CLIENTBOUND_SEND_MESSAGE, [message]))
 
+    def getValue(self):
+        server.sendEvent(self.Client, Event(EventType.CLIENTBOUND_VALUE_REQUEST, []))
+        response = []
+        def onResponse(event):
+            response.append(event.data[0])
+            
+        server.addListener(EventType.SERVERBOUND_VALUE_RESPONSE, onResponse)
+
+        while (len(response)) == 0:
+            pass
+        server.removeListener(EventType.SERVERBOUND_VALUE_RESPONSE, onResponse)
+        return response[0]
+    
 
 class Game:
     def __init__(self, players):
