@@ -25,8 +25,6 @@ while not connected:
     except socket.error:
         print("Could not connect to " + ip + ":" + str(port))
 
-client.send(str.encode("Client " + socket.gethostbyname(socket.gethostname()) + " connected"))
-
 packetInQueue = []
 packetOutQueue = []
 listeners = {}
@@ -75,7 +73,7 @@ def onChoiceRequest(event):
         print(str(i) + ") " + choices[i])
     choice = input("Enter your choice")
 
-    sendEvent(Event(EventType.SERVERBOUND_CHOICE_RESPONSE, [choice]))
+    sendEvent(Event(EventType.SERVERBOUND_CHOICE_RESPONSE, [int(choice)]))
 
 
 

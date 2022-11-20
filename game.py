@@ -435,27 +435,28 @@ class Game:
                 currentPlayer.health = currentPlayer.maxhealth
                 currentPlayer.dead = False
 
-        print("received response " + currentPlayer.getChoice(["Yes", "No"]))
-
-        print("Starting player ", currentPlayer.id, "'s turn")
+        self.sendMessageAll("Starting player " + str(currentPlayer.id) + "'s turn")
 
         currentPlayer.freecardplayed = False
 
         currentPlayer.coins += 1
-        print("Player", currentPlayer.id, "has", currentPlayer.coins, "coins")
+        self.sendMessageAll("Player " + str(currentPlayer.id) + " has " + str(currentPlayer.coins) + " coins")
 
         co.draw(1, "loot", currentPlayer, self)
 
         while True:
-            sendMessage("Play loot card? [Y/N]: ")
-            playcard = getChoice()
-            if playcard == "Y":
+            currentPlayer.sendMessage("Play loot card?")
+            playcard = currentPlayer.getChoice(["Y","N"])
+            print(playcard)
+            if playcard == 0:
+                print("0 was selected")
                 card = co.chooseLootCard(currentPlayer)
                 lcf.cardtype(card, currentPlayer, self)
                 currentPlayer.loot_cards.remove(card)
                 currentPlayer.freecardplayed = True
                 break
-            if playcard == "N":
+            if playcard == 1:
+                print("1 was selected")
                 break
             else:
                 pass
@@ -463,46 +464,51 @@ class Game:
         if not currentPlayer.dead:
             if currentPlayer.freecardplayed:
                 while True:
-                    sendMessage("Play loot card? [Y/N]: ")
-                    playcard = getChoice()
-                    if playcard == "Y":
+                    self.sendMessage("Play loot card? [Y/N]: ")
+                    playcard = currentPlayer.getChoice(["Y", "N"])
+                    if playcard == 0:
                         card = co.chooseLootCard(currentPlayer)
                         lcf.cardtype(card, currentPlayer, self)
                         currentPlayer.loot_cards.remove(card)
                         # Player card is tapped
                         break
-                    if playcard == "N":
+                    if playcard == 1:
                         break
                     else:
                         pass
 
             if not currentPlayer.dead:
 
-                print("SHOP: ")
+                currentPlayer.sendMessage("SHOP: ")
                 for slot in self.active_shop:
-                    print(slot.name)  # Going to have to add card descriptors so people know what the card does :(
+                    currentPlayer.sendMessage(slot.name)  # Going to have to add card descriptors so people know what the card does :(
 
                 if currentPlayer.coins >= 10:
                     while True:
-                        sendMessage("Buy Item? [Y/N]: ")
-                        buy_item = getChoice()
-                        if buy_item == "Y":
+                        currentPlayer.sendMessage("Buy Item?")
+                        buy_item = currentPlayer.getChoice(["Y","N"])
+                        if buy_item == 0:
                             choices = ["Deck"]
-                            print("0: Deck")
+                            currentPlayer.sendMessage("0: Deck")
                             for slot in self.active_shop:
                                 choices.append(slot.name)
-                                print(slot.name)
+                                currentPlayer.sendMessage(slot.name)
 
                             which_item = 999
                             while int(which_item) > len(choices):
-                                sendMessage("Select Item [0-"+str(len(choices)-1)+"]: ")
-                                which_item = getChoice()
+                                currentPlayer.sendMessage("Select Item [0-"+str(len(choices)-1)+"]: ")
+                                vals = []
+                                vals.append("Off the top")
+                                for i in range(len(choices)):
+                                    vals.append(choices[i].name)
+                        
+                                which_item = player.getChoice()
                                 if which_item == "0":
                                     currentPlayer.treasure_cards.append(self.treasure_deck.pop())
                                     currentPlayer.coins -= 10
 
                                 else:
-                                    print("Player "+str(currentPlayer.id)+" has bought "+str(self.active_shop[int(which_item)-1].name))
+                                    self.sendMessageAll("Player "+str(currentPlayer.id)+" has bought "+str(self.active_shop[int(which_item)-1].name))
                                     currentPlayer.treasure_cards.append(self.active_shop[int(which_item)-1])
                                     self.active_shop[int(which_item)-1] = self.treasure_deck.pop()
 
@@ -510,36 +516,39 @@ class Game:
                             break
 
                             # Look at current player treasure hand, if steam sale present, add 5 coins back
-                        if buy_item == "N":
+                        if buy_item == 1:
                             break
                         else:
                             pass
 
                 else:
-                    print("You don't have 10 coins, skipping shop phase")
+                    currentPlayer.sendMessage("You don't have 10 coins, skipping shop phase")
 
-                print()
+                currentPlayer.sendMessage("-")
                 self.checkMonsterSlots()
-                print("Active Monsters:")
+                currentPlayer.sendMessage("Active Monsters:")
                 for slot in self.active_monsters:
-                    print("Name:", str(slot[-1].name)+",", "Health:", str(slot[-1].health)+",", "Required Roll:", str(slot[-1].defence)+",", "Attack power:", str(slot[-1].swords)+",", "Rewards:", str(slot[-1].reward)+",",  "Souls:", str(slot[-1].souls))
+                    currentPlayer.sendMessage("Name:", str(slot[-1].name)+",", "Health:", str(slot[-1].health)+",", "Required Roll:", str(slot[-1].defence)+",", "Attack power:", str(slot[-1].swords)+",", "Rewards:", str(slot[-1].reward)+",",  "Souls:", str(slot[-1].souls))
 
-                print()
+                currentPlayer.sendMessage("-")
                 while True and not currentPlayer.dead:
-                    sendMessage("Attack a monster? [Y/N]: ")
-                    do_attack = getChoice()
+                    currentPlayer.sendMessage("Attack a monster?")
+                    do_attack = currentPlayer.getChoice(["Y","n"])
 
-                    if do_attack == "Y":
+                    if do_attack == 0:
                         monsters = ["Deck"]
-                        print("0: Deck")
+                        currentPlayer.sendMessage("0: Deck")
                         for slot in self.active_monsters:
                             monsters.append(slot[-1].name)
-                            print(slot[-1].name)
+                            currentPlayer.sendMessage(slot[-1].name)
 
                         which_monster = 999
                         while int(which_monster) > len(monsters):
-                            sendMessage("Select monster [0-"+str(len(monsters)-1)+"]")
-                            which_monster = getChoice()
+                            currentPlayer.sendMessage("Select monster [0-"+str(len(monsters)-1)+"]")
+                            vals = []
+                            for i in range(len(monsters)):
+                                vals.append(monsters[i])
+                            which_monster = currentPlayer.getChoice(vals)
 
                             monster = None
                             while True:
@@ -547,9 +556,9 @@ class Game:
                                     self.active_monsters[0].append(self.monster_deck.pop())
                                     monster = self.active_monsters[0][-1]
                                     if monster.type == "monster":
-                                        print("Name:", str(self.active_monsters[0][-1].name) + ",", "Health:", str(self.active_monsters[0][-1].health) + ",", "Required Roll:", str(self.active_monsters[0][-1].defence) + ",", "Attack power:", str(self.active_monsters[0][-1].swords) + ",", "Rewards:",str(self.active_monsters[0][-1].reward) + ",", "Souls:", str(self.active_monsters[0][-1].souls))
+                                        currentPlayer.sendMessage("Name:", str(self.active_monsters[0][-1].name) + ",", "Health:", str(self.active_monsters[0][-1].health) + ",", "Required Roll:", str(self.active_monsters[0][-1].defence) + ",", "Attack power:", str(self.active_monsters[0][-1].swords) + ",", "Rewards:",str(self.active_monsters[0][-1].reward) + ",", "Souls:", str(self.active_monsters[0][-1].souls))
                                     if monster.type == "immediate":
-                                        print(monster.name)
+                                        currentPlayer.sendMessage(monster.name)
                                         monster.immediate_handler(monster, self)
                                         self.active_monsters[0].pop()
                                         self.checkMonsterSlots()
@@ -562,18 +571,18 @@ class Game:
                                     break
 
                             while True:
-                                print(player.health)
+                                currentPlayer.sendMessage(player.health)
                                 if player.health <= 0: #If player died from an immediate being pulled from top
                                     break
                                 combat_ended = monster.attack_monster(currentPlayer, monster.defence, monster.health, self)
                                 if combat_ended == "m":
-                                    print("Monster defeated")
+                                    currentPlayer.sendMessage("Monster defeated")
                                     game.monster_discard.append(self.active_monsters[int(which_monster)-1].pop())
 
                                     self.checkMonsterSlots()
                                     break
                                 elif combat_ended == "p":
-                                    print("Player defeated")
+                                    currentPlayer.sendMessage("Player defeated")
                                     break
                                 else:
                                     pass
@@ -613,5 +622,4 @@ def createGame(s):
     server = s
     print("creating game")
     game = Game(len(server.connections))
-
 
