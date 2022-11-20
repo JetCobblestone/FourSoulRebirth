@@ -43,7 +43,7 @@ class Server:
                     except pickle.UnpicklingError:
                         print(msg)
                     if success:
-                        print("got message")
+                        print(eventObj)
                         if isinstance(eventObj, Event.Event):
                             print("recieved " + str(eventObj.eventType))
                             self.sendEvent(client, Event.Event(Event.EventType.CLIENTBOUND_PACKET_RECIEVED, [True]))
@@ -56,17 +56,30 @@ class Server:
                 self.connections.append(client)
                 _thread.start_new_thread(threaded_client, (client,))
 
-        self.addListener(Event.EventType.SERVERBOUND_CLIENT_JOIN, lambda event : createGame(self))
+        def onClientJoin(event):
+            for client in self.connections:
+                self.sendEvent(client, Event.Event(Event.EventType.CLIENTBOUND_SEND_MESSAGE, ["A player joined"]))
+            if len(self.connections) == 1:
+                self.sendEvent(self.connections[0], Event.Event(Event.EventType.CLIENTBOUND_CHOICE_REQUEST, ["Start game"]))
+                self.addListener(Event.EventType.SERVERBOUND_CHOICE_RESPONSE, onStart)
+
+        def onStart(event):
+            self.listeners[Event.EventType.SERVERBOUND_CHOICE_RESPONSE] = []
+            createGame(self)
+        
 
         _thread.start_new_thread(acceptConnection, ())
+        self.addListener(Event.EventType.SERVERBOUND_CLIENT_JOIN, onClientJoin)
 
 
         quit = False
         while not quit:
             if len(self.eventQueue) > 0:
                 event = self.eventQueue.pop()
+                print(event.eventType, self.listeners.setdefault(event.eventType, []))
                 for function in self.listeners.setdefault(event.eventType, []):
-                    function(event)
+                    _thread.start_new_thread(function, (event,))
+                    
 
 
 
@@ -80,4 +93,9 @@ class Server:
     def addListener(self, event, function):
         vals = self.listeners.setdefault(event, [])
         vals.append(function)
+        self.listeners[event] = vals
+
+    def removeListener(self, event, function):
+        vals = self.listeners.setdefault(event, [])
+        vals.remove(function)
         self.listeners[event] = vals

@@ -25,8 +25,6 @@ while not connected:
     except socket.error:
         print("Could not connect to " + ip + ":" + str(port))
 
-client.send(str.encode("Client " + socket.gethostbyname(socket.gethostname()) + " connected"))
-
 packetInQueue = []
 packetOutQueue = []
 listeners = {}
@@ -70,17 +68,24 @@ def test(event):
     sendEvent(Event(EventType.SERVERBOUND_CHARACTER_CHOICE, [0,event.data[0]]))
 
 def onChoiceRequest(event):
-    choices = event.data[0]
-    for i in len(choices):
+    choices = event.data
+    for i in range(len(choices)):
         print(str(i) + ") " + choices[i])
     choice = input("Enter your choice")
-    sendEvent(Event(EventType.SERVERBOUND_RESPOND_CHOICE, [choice]))
+
+    sendEvent(Event(EventType.SERVERBOUND_CHOICE_RESPONSE, [int(choice)]))
+
+
+
+def onReceiveMessage(event):
+    print(event.data[0])
 
 _thread.start_new_thread(receive_packets, ())
 _thread.start_new_thread(send_packets, ())
 addListener(EventType.CLIENTBOUND_PACKET_RECIEVED, setLastReceived)
 addListener(EventType.CLIENTBOUND_CHARACTER_CHOICE, test)
-addListener(EventType.CLIENTBOUND_REQUEST_CHOICE, onChoiceRequest)
+addListener(EventType.CLIENTBOUND_CHOICE_REQUEST, onChoiceRequest)
+addListener(EventType.CLIENTBOUND_SEND_MESSAGE, onReceiveMessage)
 sendEvent(Event(EventType.SERVERBOUND_CLIENT_JOIN, []))
 
 

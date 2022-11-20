@@ -94,7 +94,8 @@ def dark_bum(player):
 # Mom's Box
 def moms_box(player, dice_roll):
     if dice_roll == 4:
-        choice = input("Mom's Box? Y/N")
+        player.sendMessage("Mom's Box? Y/N")
+        choice = player.getChoice()
         if choice == "Y":
             co.draw(1, "loot", player, game)
             co.discardLoot(player)
@@ -103,7 +104,8 @@ def moms_box(player, dice_roll):
 # Sacred Heart
 def sacred_heart(player, dice_roll, current_player):
     if dice_roll == 1 and player == current_player:
-        choice = input("Sacred Heart? Y/N")
+        player.sendMessage("Sacred Heart? Y/N")
+        choice = player.getChoice()
         if choice == "Y":
             dice_roll = 1
     return dice_roll
@@ -118,7 +120,8 @@ def the_relic(player, dice_roll):
 # Dad's Lost Coin
 def dads_lost_coin(player, dice_roll):
     if dice_roll == 1:
-        choice = input("Sacred Heart? Y/N")
+        player.sendMessage("Dad's Lost Coin? Y/N")
+        choice = player.getChoice()
         if choice == "Y":
             dice_roll = lcf.reroll("roll")
 
@@ -182,7 +185,8 @@ def the_d100(player):
 
 # Godhead
 def godhead(player, dice_roll):
-    choice = input("1 or 6")
+    player.sendMessage("1 or 6? ")
+    choice = player.getChoice()
     if choice == "1":
         dice_roll = 1
     elif choice == "6":
@@ -195,10 +199,12 @@ def godhead(player, dice_roll):
 
 # Sack Head
 def sack_head(player, game):
-    deck = input("Enter a deck: ")
+    player.sendMessage("Enter a deck: ")
+    deck = player.getChoice()
     card_look_at = game.deck.pop()
     print(card_look_at)
-    bot_or_top = input("Place on bottom? Y/N ")
+    player.sendMessage("Place on bottom? Y/N ")
+    bot_or_top = player.getChoice()
     if bot_or_top == "Y":
         dummy_array = [card_look_at]
         deck = card_look_at + deck
