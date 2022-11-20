@@ -289,7 +289,6 @@ class Game:
             server.sendEvent(player.client, Event(EventType.CLIENTBOUND_CHARACTER_CHOICE, [self.character_deck[(3*i)], self.character_deck[(3*i)+1], self.character_deck[(3*i)+2]]))
 
     def main_loop(self):
-        print(self)
 
         if self.turn > len(self.players):
             self.turn = 1
