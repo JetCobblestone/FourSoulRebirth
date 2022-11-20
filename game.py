@@ -6,6 +6,7 @@ from event import EventType, Event
 import cardoperations as co
 import dice
 
+game = None
 
 class Deck:
 
@@ -266,7 +267,7 @@ class Game:
 
             # Give player starting loot cards
             for player in self.players:
-                co.draw(3, "loot", player, game)
+                co.draw(3, "loot", player, self)
 
             for slot in self.active_monsters:
                 while True:
@@ -275,11 +276,11 @@ class Game:
                         slot.append(card_from_top)
                         break
                     else:
-                        game.monster_discard.append(card_from_top)
+                        self.monster_discard.append(card_from_top)
 
             # Start the game
             self.main_loop()
-        game = self
+
         server.addListener(EventType.SERVERBOUND_CHARACTER_CHOICE, choicesMade)
 
         # Players make character selection
@@ -288,6 +289,7 @@ class Game:
             server.sendEvent(player.client, Event(EventType.CLIENTBOUND_CHARACTER_CHOICE, [self.character_deck[(3*i)], self.character_deck[(3*i)+1], self.character_deck[(3*i)+2]]))
 
     def main_loop(self):
+        print(self)
 
         if self.turn > len(self.players):
             self.turn = 1
@@ -305,13 +307,13 @@ class Game:
 
         currentPlayer.coins += 1
 
-        co.draw(1, "loot", currentPlayer, game)
+        co.draw(1, "loot", currentPlayer, self)
 
         while True:
             playcard = input("Play lootcard? Y/N: ")
             if playcard == "Y":
                 card = co.chooseLootCard(currentPlayer)
-                lcf.cardtype(card, currentPlayer, game)
+                lcf.cardtype(card, currentPlayer, self)
                 break
             if playcard == "N":
                 break
@@ -321,6 +323,4 @@ class Game:
 
 def createGame(server):
     print("creating game")
-    Game(len(server.connections), server)
-
-game = ""
+    game = Game(len(server.connections), server)
