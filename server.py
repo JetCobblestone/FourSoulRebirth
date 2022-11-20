@@ -48,6 +48,7 @@ class Server:
                             print("recieved " + str(eventObj.eventType))
                             self.sendEvent(client, Event.Event(Event.EventType.CLIENTBOUND_PACKET_RECIEVED, [True]))
                             eventObj.setSource = client
+                            print
                             self.eventQueue.append(eventObj)
 
         def acceptConnection():
@@ -56,7 +57,10 @@ class Server:
                 self.connections.append(client)
                 _thread.start_new_thread(threaded_client, (client,))
 
+        
+
         self.addListener(Event.EventType.SERVERBOUND_CLIENT_JOIN, lambda event : createGame(self))
+
 
         _thread.start_new_thread(acceptConnection, ())
 
@@ -65,8 +69,10 @@ class Server:
         while not quit:
             if len(self.eventQueue) > 0:
                 event = self.eventQueue.pop()
+                print(event.eventType, self.listeners.setdefault(event.eventType, []))
                 for function in self.listeners.setdefault(event.eventType, []):
-                    function(event)
+                    _thread.start_new_thread(function, (event,))
+                    
 
 
 
@@ -82,7 +88,7 @@ class Server:
         vals.append(function)
         self.listeners[event] = vals
 
-    def removeLister(self, event, function):
+    def removeListener(self, event, function):
         vals = self.listeners.setdefault(event, [])
         vals.remove(function)
         self.listeners[event] = vals

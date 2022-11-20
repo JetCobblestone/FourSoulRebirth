@@ -348,9 +348,11 @@ class Player:
 
         while (len(response)) == 0:
             pass
-        server.removeListener(onResponse)
+        server.removeListener(EventType.SERVERBOUND_CHOICE_RESPONSE, onResponse)
         return response[0]
 
+    def sendMessage(self, message):
+        server.sendEvent(self.client, Event(EventType.CLIENTBOUND_SEND_MESSAGE, [message]))
 
 
 class Game:
@@ -404,6 +406,10 @@ class Game:
         game = self
         # Start the game
         self.main_loop()
+
+    def sendMessageAll(self, messgae):
+        for player in self.players:
+            player.sendMessage
 
     def main_loop(self):
 
