@@ -5,7 +5,7 @@ def draw(n, deck, player, game):
         for i in range(0, n):
             player.treasure_cards.append(game.treasure_deck.pop())
             item = player.treasure_cards[-1]
-            print("You have been given",item.name)
+            print("You have been given", item.name)
 
     else:  # For loot cards
         for i in range(0, n):
@@ -14,11 +14,15 @@ def draw(n, deck, player, game):
 
 
 def chooseLootCard(player):
+
+    name_array = []
     for card in player.loot_cards:
-        print(vars(card))
+        player.sendMessage(vars(card))
+        name_array.append(card.name)
 
     while True:
-        selection = input("Select card (By number (0-" + str(len(player.loot_cards) - 1) + "): ")
+        player.sendMessage("Select card (By number (0-" + str(len(player.loot_cards) - 1) + "): ")
+        selection = player.getChoice(name_array)
         try:
             selection = int(selection)
             player.loot_cards[selection]
