@@ -78,12 +78,12 @@ class Card:
 
 
 class TreasureCard(Card):
-    def __init__(self, name, is_passive, passive_effect=None, active_effect=None, cost_effect=None):
-        self.passive = is_passive  # Whether item is active or passive (Gold/Grey border)
+    def __init__(self, name, passive_effect, active_effect, cost_effect, guppy):
         self.tapped = False  # Whether active item has been used (passive items keep this as false)
         self.passive_effect = passive_effect  # Effect of a grey treasure (and trinket)
         self.active_effect = active_effect  # Effect of gold treasure
         self.cost_effect = cost_effect  # Effect of activating "cost" actives (e.g pay 3 to roll something)
+        self.guppy = int(guppy)
         super().__init__(name)
 
 
@@ -206,22 +206,68 @@ class MonsterCard(Card):
                 game.active_monsters[-1].append(game.monster_deck.pop())
 
             elif card.name == "We Need To Go Deeper":
-                pass
+                num = input("Enter how many discarded monsters to put back on top")
+                size = len(game.monster_discard)
+                for i in range(size-1, size-1-num, -1):
+                    game.monster_deck.append(game.mondster_discard[i])
+                    game.monster_discard.pop(i)
+                print("Do you want to attack again?")
+                player = game.players[game.turn-1]
+                choice = player.getChoice(["Yes", "No"])
+                if choice == 0:
+                    player.attack()
 
             elif card.name == "Troll Bombs":
-                pass
+                game.players[game.turn-1].takeDamage(2)
 
             elif card.name == "I Can See Forever":
-                pass
+                lcf.cardtype(card, game.players[game.turn-1], game)
 
             elif card.name == "Greed!":
-                pass
+                candidates = []
+                max = -1
+                for player in game.players:
+                    if player.coins > max:
+                        candidates = [player]
+                        max = player.coins
+                    elif player.coins == max:
+                        candidates.append[player]
+                target = None
+                if len(candidates) == 1:
+                    target = candidates[0]
+                elif len(candidates) > 1:
+                    choices = []
+                    for candidate in candidates:
+                        choices.append("player " + str(candidate.id))
+                    target = candidates[player.getChoice(choices)]
+                if len != 0:
+                    target.setCoins(0)
 
-            elif card.name == "Mega Troll Bomb":
-                pass
+            elif card.name == "Mega Troll Bomb!":
+                for player in game.players:
+                    player.takeDamage(2)
 
             elif card.name == "Devil Deal":
-                pass
+                choices = ["Loot 2, Take 1 Damage", "Search the treasure deck for a guppy item. Gain it and take 2 damage. Shuffle the deck."]
+                print(choices)
+                player = game.players[game.turn-1]
+                choice = int(input(""))
+                if choice == 0:
+                    co.draw(2, "loot", player, game)
+                    player.takeDamage(1)
+                else:
+                    deck = game.treasure_deck
+                    card = None
+                    for i in range(len(deck) - 1, 0, -1):
+                        card1 = deck[i]
+                        if card1.guppy == True:
+                            card = card1
+                    if card is None:
+                        print("No guppy card")
+                    else:
+                        player.treasure_cards.append(card)
+                        game.treasure_deck.remove(card)
+                    player.takeDamage(2)
 
             else:
                 print(card.name)
@@ -241,8 +287,8 @@ class CharacterCard(Card):
 
 
 class Player:
-    def __init__(self, id, client):
-        self.coins = 3
+    def __init__(self, id):
+        self.coins = 20
         self.loot_cards = []
         self.treasure_cards = []
         self.character_card = None
@@ -258,6 +304,35 @@ class Player:
         card = self.loot_cards[selection]
         lcf.cardtype(card, self, game)
 
+    def takeDamage(self, amount):
+        self.health -= amount
+        if game.players[game.turn-1] == self: #Only display damage info about current player
+            print("Took",amount,"damage. You are now on",self.health)
+        if self.health <= 0:
+            self.pay_death_penalities()
+            return True
+        return False
+
+
+    def pay_death_penalities(self):
+
+        if not self.dead:
+            print("Player",self.id,"has died.")
+            if len(self.loot_cards) > 0:
+                print("Choose a loot card to discard (0-"+str(len(self.loot_cards)-1)+")")
+                self.loot_cards.remove(co.chooseLootCard(self))
+            if self.coins > 0:
+                self.coins -= 1
+
+            if len(self.treasure_cards) == 2:
+                game.treasure_discard.append(self.treasure_cards[1])
+                self.treasure_cards = []
+
+            if len(self.treasure_cards) > 2:
+                print("Choose a treasure card to discard (1-" + str(len(self.treasure_cards)-1) + ")")
+                self.treasure_cards.remove(co.chooseTreasureCard(self))
+
+            self.dead = True
 
 class Game:
     def __init__(self, players):
@@ -271,11 +346,12 @@ class Game:
         self.character_deck = []
         self.active_monsters = [[], []]
         self.active_shop = []
+        self.playerMap = {}
 
         # Create for n players. Works for up to 6 players
         self.players = []
-        for i in range(0, players):
-            self.players.append(Player(i+1, server.connections[i]))  # i is the player id
+        for i in range(1, players+1):
+            self.players.append(Player(i))  # i is the player id
 
         # Current player's turn. Starts as turn = 1, as player 1 goes first. Number represents the player.
         self.turn = 1
