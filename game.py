@@ -209,7 +209,8 @@ class MonsterCard(Card):
                 game.active_monsters[-1].append(game.monster_deck.pop())
 
             elif card.name == "We Need To Go Deeper":
-                num = input("Enter how many discarded monsters to put back on top")
+                player.sendMessage("Enter how many discarded monsters to put back on top")
+                num = player.getValue()
                 size = len(game.monster_discard)
                 for i in range(size-1, size-1-num, -1):
                     game.monster_deck.append(game.mondster_discard[i])
