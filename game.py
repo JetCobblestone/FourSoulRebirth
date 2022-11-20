@@ -5,8 +5,10 @@ import lootcardfunctions as lcf
 import cardoperations as co
 import dice
 import monstercardfunctions as mcf
+from event import Event, EventType
 
 game = None
+server = None
 
 
 class Deck:
@@ -287,7 +289,7 @@ class CharacterCard(Card):
 
 
 class Player:
-    def __init__(self, id):
+    def __init__(self, id, client):
         self.coins = 20
         self.loot_cards = []
         self.treasure_cards = []
@@ -299,6 +301,7 @@ class Player:
         self.temp_damage = 0
         self.health = self.maxhealth
         self.dead = False
+        self.client = client
 
     def playLoot(self, selection):
         card = self.loot_cards[selection]
@@ -334,6 +337,22 @@ class Player:
 
             self.dead = True
 
+    def getChoice(self, choices):
+        server.sendEvent(self.client, Event(EventType.CLIENTBOUND_CHOICE_REQUEST, choices))
+
+        response = []
+        def onResponse(event):
+            response.append(event.data[0])
+            
+        server.addListener(EventType.SERVERBOUND_CHOICE_RESPONSE, onResponse)
+
+        while (len(response)) == 0:
+            pass
+        server.removeListener(onResponse)
+        return response[0]
+
+
+
 class Game:
     def __init__(self, players):
         global game
@@ -351,7 +370,7 @@ class Game:
         # Create for n players. Works for up to 6 players
         self.players = []
         for i in range(1, players+1):
-            self.players.append(Player(i))  # i is the player id
+            self.players.append(Player(i, server.connections[i-1]))  # i is the player id
 
         # Current player's turn. Starts as turn = 1, as player 1 goes first. Number represents the player.
         self.turn = 1
@@ -394,6 +413,8 @@ class Game:
                 currentPlayer = player
                 currentPlayer.health = currentPlayer.maxhealth
                 currentPlayer.dead = False
+
+        print("received response " + currentPlayer.getChoice(["Yes", "No"]))
 
         print("Starting player ", currentPlayer.id, "'s turn")
 
@@ -560,9 +581,10 @@ class Game:
                 if newcard.type == "monster":
                     slot.append(newcard)
 
-def createGame():
+def createGame(s):
+    global server
+    server = s
     print("creating game")
-    game = Game(3)
+    game = Game(len(server.connections))
 
 
-createGame()

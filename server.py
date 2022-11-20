@@ -81,3 +81,8 @@ class Server:
         vals = self.listeners.setdefault(event, [])
         vals.append(function)
         self.listeners[event] = vals
+
+    def removeLister(self, event, function):
+        vals = self.listeners.setdefault(event, [])
+        vals.remove(function)
+        self.listeners[event] = vals
