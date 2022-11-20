@@ -2,11 +2,12 @@
 # Code
 import random
 import lootcardfunctions as lcf
-from event import EventType, Event
 import cardoperations as co
 import dice
+import monstercardfunctions as mcf
 
 game = None
+
 
 class Deck:
 
@@ -98,48 +99,76 @@ class MonsterCard(Card):
         self.effectBool = effectBool
         super().__init__(name)
 
-    def attack_monster(self, player, defense, turn_hp):
+    def attack_monster(self, player, defense, turn_hp, game):
+        input("Press enter to roll")
         player_attack = dice.dice()
         # ADD MODIFIERS --------------------------------------------------------------------------------------------------
+        if mcf.nodamage(self, player_attack):
+            return False
+
         if player_attack >= defense:
-            self.take_damage(player.swords)
+
+            if self.take_damage(player.swords, game, player):  # Method returns True when monster dead
+                return "m"  # If monster dead, return False to show combat isn't active
+            else:
+                return False
+
         else:
-            player.turn_hp -= self.swords
+            if player.takeDamage(self.swords):
+                return "p"  # Same as above but for player
+            else:
+                return False
 
-    def take_damage(self, damage):
-        self.turn_hp -= damage
-        self.check_dead(game.players[game.turn])
+    def take_damage(self, damage, game, player):
+        if self.name == "The Duke Of Flies" and dice.dice() == 1: # DOF Blocks damage on 1
+            self.health += damage
+            print("Rolled 1, Damage negated")
+        self.health -= damage
+        return self.check_dead(game, player)
 
-    def check_dead(self, whos_turn):
-        if self.turn_hp <= 0:  # Monster has died
+    def check_dead(self, game, player):
+        if self.health <= 0:  # Monster has died
 
+            print(self.reward[1], self.reward[0])
             # Reward decoder:
             if self.reward[1] == "C":
-                whos_turn.coins += int(self.reward[0])
+                if self.reward[0] == "x":
+                    determined_reward = dice.dice()
+                else:
+                    determined_reward = self.reward[0]
+                print("Reward: "+str(determined_reward)+" coins")
+                player.coins += int(determined_reward)
+                print("You now have", player.coins)
 
             elif self.reward[1] == "L":
-                co.draw(int(self.reward[0]), "loot", whos_turn, game)
+                if self.reward[0] == "x":
+                    determined_reward = dice.dice()
+                else:
+                    determined_reward = self.reward[0]
+                co.draw(int(determined_reward), "loot", player, game)
 
             elif self.reward[1] == "T":
-                co.draw(int(self.reward[0]), "treasure", whos_turn, game)
+                co.draw(int(self.reward[0]), "treasure", player, game)
 
             else:
                 print("YOU MISSED A CODE")
 
-            whos_turn.souls += self.souls
+            player.souls += self.souls
 
             for slot in game.active_monsters:
                 if len(slot) == 0:  # If monster slot is empty, draw card
-                    slot.append(game.monster_deck.pop())
+                    slot = [game.monster_deck.pop()]
                     while slot[-1].type == "immediate":
-                        self.immediate_handler((slot[-1]))
-                        slot.append(game.monster_deck.pop())
+                        self.immediate_handler(slot[-1], game)
+                        slot = [game.monster_deck.pop()]
 
-        print("Target not dead, Remaining HP: " + str(self.turn_hp))
+            return True
 
-    def immediate_handler(self, card):
+        print("Target not dead, Remaining HP: " + str(self.health))
+        return False
 
-        if card.name.find("Chest") or card.name.find("Secret"):
+    def immediate_handler(self, card, game):
+        if "Chest" in card.name or "Secret" in card.name:
 
             if card.name == "Gold_Chest":
                 outcomes = "+1T;+1T;+1L;+1L;+2L,+2L"
@@ -168,7 +197,8 @@ class MonsterCard(Card):
             else:
                 print("FALSE DETECTION")
 
-            lcf.roll(game.players[game.turn], outcomes, game)
+            lcf.roll(game.players[game.turn-1], outcomes, game)
+
         else:
 
             if card.name == "XL Floor!":
@@ -217,11 +247,11 @@ class Player:
         self.character_card = None
         self.souls = 0
         self.id = id
-        self.health = 2
-        self.damage = 1
+        self.maxhealth = 2
+        self.swords = 1
         self.temp_damage = 0
-        self.temp_hp = 0
-        self.client = client
+        self.health = self.maxhealth
+        self.dead = False
 
     def playLoot(self, selection):
         card = self.loot_cards[selection]
@@ -229,10 +259,12 @@ class Player:
 
 
 class Game:
-    def __init__(self, players, server):
+    def __init__(self, players):
+        global game
         # Generate Decks as objects
         self.loot_deck = []
         self.treasure_deck = []
+        self.treasure_discard = []
         self.monster_deck = []
         self.monster_discard = []
         self.character_deck = []
@@ -257,69 +289,202 @@ class Game:
         self.character_deck = Deck().createDeck(18, "character")
         random.shuffle(self.character_deck)
 
-        responses = {}
+        # Give player starting loot cards
+        for player in self.players:
+            co.draw(30, "loot", player, self)
 
-        # Called when a response is received
-        def choicesMade(eventObj):
-            responses[str(eventObj.data[0])] = eventObj.data[1]
-            if len(responses) != len(self.players):
-                return
+        for slot in self.active_monsters:
+            while True:
+                card_from_top = self.monster_deck.pop()
+                if card_from_top.type == "monster":
+                    slot.append(card_from_top)
+                    break
+                else:
+                    self.monster_discard.append(card_from_top)
 
-            # Give player starting loot cards
-            for player in self.players:
-                co.draw(3, "loot", player, self)
+        for i in range(2):
+            self.active_shop.append(self.treasure_deck.pop())
 
-            for slot in self.active_monsters:
-                while True:
-                    card_from_top = self.monster_deck.pop()
-                    if card_from_top.type == "monster":
-                        slot.append(card_from_top)
-                        break
-                    else:
-                        self.monster_discard.append(card_from_top)
-
-            # Start the game
-            self.main_loop()
-
-        server.addListener(EventType.SERVERBOUND_CHARACTER_CHOICE, choicesMade)
-
-        # Players make character selection
-        for i in range(len(self.players)):
-            player = self.players[i]
-            server.sendEvent(player.client, Event(EventType.CLIENTBOUND_CHARACTER_CHOICE, [self.character_deck[(3*i)], self.character_deck[(3*i)+1], self.character_deck[(3*i)+2]]))
+        game = self
+        # Start the game
+        self.main_loop()
 
     def main_loop(self):
-
-        if self.turn > len(self.players):
-            self.turn = 1
-
-
 
         currentPlayer = None
         for player in self.players:
             if self.turn == player.id:
                 currentPlayer = player
+                currentPlayer.health = currentPlayer.maxhealth
+                currentPlayer.dead = False
 
-        self.turn += 1
+        print("Starting player ", currentPlayer.id, "'s turn")
 
         currentPlayer.freecardplayed = False
 
         currentPlayer.coins += 1
+        print("Player", currentPlayer.id, "has", currentPlayer.coins, "coins")
 
         co.draw(1, "loot", currentPlayer, self)
 
         while True:
-            playcard = input("Play lootcard? Y/N: ")
+            playcard = input("Play loot card? [Y/N]: ")
             if playcard == "Y":
                 card = co.chooseLootCard(currentPlayer)
                 lcf.cardtype(card, currentPlayer, self)
+                currentPlayer.loot_cards.remove(card)
+                currentPlayer.freecardplayed = True
                 break
             if playcard == "N":
                 break
             else:
                 pass
 
+        if not currentPlayer.dead:
+            if currentPlayer.freecardplayed:
+                while True:
+                    playcard = input("Play another? [Y/N]: ")
+                    if playcard == "Y":
+                        card = co.chooseLootCard(currentPlayer)
+                        lcf.cardtype(card, currentPlayer, self)
+                        currentPlayer.loot_cards.remove(card)
+                        # Player card is tapped
+                        break
+                    if playcard == "N":
+                        break
+                    else:
+                        pass
 
-def createGame(server):
+            if not currentPlayer.dead:
+
+                print("SHOP: ")
+                for slot in self.active_shop:
+                    print(slot.name)  # Going to have to add card descriptors so people know what the card does :(
+
+                if currentPlayer.coins >= 10:
+                    while True:
+                        buy_item = input("Buy Item? [Y/N]: ")
+                        if buy_item == "Y":
+                            choices = ["Deck"]
+                            print("0: Deck")
+                            for slot in self.active_shop:
+                                choices.append(slot.name)
+                                print(slot.name)
+
+                            which_item = 999
+                            while int(which_item) > len(choices):
+                                which_item = input("Select Item [0-"+str(len(choices)-1)+"]: ")
+                                if which_item == "0":
+                                    currentPlayer.treasure_cards.append(self.treasure_deck.pop())
+                                    currentPlayer.coins -= 10
+
+                                else:
+                                    print("Player "+str(currentPlayer.id)+" has bought "+str(self.active_shop[int(which_item)-1].name))
+                                    currentPlayer.treasure_cards.append(self.active_shop[int(which_item)-1])
+                                    self.active_shop[int(which_item)-1] = self.treasure_deck.pop()
+
+                            currentPlayer.coins -= 10
+                            break
+
+                            # Look at current player treasure hand, if steam sale present, add 5 coins back
+                        if buy_item == "N":
+                            break
+                        else:
+                            pass
+
+                else:
+                    print("You don't have 10 coins, skipping shop phase")
+
+                print()
+                self.checkMonsterSlots()
+                print("Active Monsters:")
+                for slot in self.active_monsters:
+                    print("Name:", str(slot[-1].name)+",", "Health:", str(slot[-1].health)+",", "Required Roll:", str(slot[-1].defence)+",", "Attack power:", str(slot[-1].swords)+",", "Rewards:", str(slot[-1].reward)+",",  "Souls:", str(slot[-1].souls))
+
+                print()
+                while True and not currentPlayer.dead:
+                    do_attack = input("Attack a monster? [Y/N]: ")
+
+                    if do_attack == "Y":
+                        monsters = ["Deck"]
+                        print("0: Deck")
+                        for slot in self.active_monsters:
+                            monsters.append(slot[-1].name)
+                            print(slot[-1].name)
+
+                        which_monster = 999
+                        while int(which_monster) > len(monsters):
+                            which_monster = input("Select monster [0-"+str(len(monsters)-1)+"]")
+
+                            monster = None
+                            while True:
+                                if which_monster == "0":
+                                    self.active_monsters[0].append(self.monster_deck.pop())
+                                    monster = self.active_monsters[0][-1]
+                                    if monster.type == "monster":
+                                        print("Name:", str(self.active_monsters[0][-1].name) + ",", "Health:", str(self.active_monsters[0][-1].health) + ",", "Required Roll:", str(self.active_monsters[0][-1].defence) + ",", "Attack power:", str(self.active_monsters[0][-1].swords) + ",", "Rewards:",str(self.active_monsters[0][-1].reward) + ",", "Souls:", str(self.active_monsters[0][-1].souls))
+                                    if monster.type == "immediate":
+                                        print(monster.name)
+                                        monster.immediate_handler(monster, self)
+                                        self.active_monsters[0].pop()
+                                        self.checkMonsterSlots()
+                                        if player.health > 0:
+                                            continue
+                                        else:
+                                            break
+                                else:
+                                    monster = self.active_monsters[int(which_monster)-1][-1]
+                                    break
+
+                            while True:
+                                print(player.health)
+                                if player.health <= 0: #If player died from an immediate being pulled from top
+                                    break
+                                combat_ended = monster.attack_monster(currentPlayer, monster.defence, monster.health, self)
+                                if combat_ended == "m":
+                                    print("Monster defeated")
+                                    self.active_monsters[int(which_monster)-1].pop()
+                                    self.checkMonsterSlots()
+                                    break
+                                elif combat_ended == "p":
+                                    print("Player defeated")
+                                    break
+                                else:
+                                    pass
+                        break
+
+
+
+                    if do_attack == "N":
+                        break
+                    else:
+                        pass
+
+        for slot in self.active_monsters:
+            for monster in slot:
+                monster.health = monster.maxhealth
+
+
+
+        self.turn += 1
+
+        if self.turn > len(self.players):
+            self.turn = 1
+
+    def checkMonsterSlots(self):
+        for slot in self.active_monsters:
+            while len(slot) == 0:
+                newcard = self.monster_deck.pop()
+
+                if newcard.type == "immediate":
+                    newcard.immediate_handler(newcard, self)
+
+                if newcard.type == "monster":
+                    slot.append(newcard)
+
+def createGame():
     print("creating game")
-    game = Game(len(server.connections), server)
+    game = Game(3)
+
+
+createGame()

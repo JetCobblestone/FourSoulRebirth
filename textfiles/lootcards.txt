@@ -51,6 +51,38 @@ Bomb,bomb,1
 Bomb,bomb,1
 Bomb,bomb,1
 Gold Bomb!!,bomb,3
+Gold Bomb!!,bomb,3
+Gold Bomb!!,bomb,3
+Gold Bomb!!,bomb,3
+Gold Bomb!!,bomb,3
+Gold Bomb!!,bomb,3
+Gold Bomb!!,bomb,3
+Gold Bomb!!,bomb,3
+Gold Bomb!!,bomb,3
+Gold Bomb!!,bomb,3
+Gold Bomb!!,bomb,3
+Gold Bomb!!,bomb,3
+Gold Bomb!!,bomb,3
+Gold Bomb!!,bomb,3
+Gold Bomb!!,bomb,3
+Gold Bomb!!,bomb,3
+Gold Bomb!!,bomb,3
+Gold Bomb!!,bomb,3
+Gold Bomb!!,bomb,3
+Gold Bomb!!,bomb,3
+Gold Bomb!!,bomb,3
+Gold Bomb!!,bomb,3
+Gold Bomb!!,bomb,3
+Gold Bomb!!,bomb,3
+Gold Bomb!!,bomb,3
+Gold Bomb!!,bomb,3
+Gold Bomb!!,bomb,3
+Gold Bomb!!,bomb,3
+Gold Bomb!!,bomb,3
+Gold Bomb!!,bomb,3
+Gold Bomb!!,bomb,3
+Gold Bomb!!,bomb,3
+Gold Bomb!!,bomb,3
 II. The High Priestess,bomb,roll
 Pills!,roll,+1TSW;+1TSW;+1THP;+1THP;+1THP;+1THP
 Pills!,roll,+1L;+1L;+3L;+3L;-1L;-1L

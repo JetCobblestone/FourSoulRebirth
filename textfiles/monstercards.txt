@@ -1,7 +1,8 @@
 Red Host,monster,2,3,2,5C,0,0
-Curse Of Greed, curse,0,0,0,0,0,0
-Evil Twin,monster,3,5,2,2T,0,1
+Dark Goblin,monster,2,4,2,2L,0,1
+Evil Twin,monster,3,5,2,1T,0,1
 Wrath,monster,3,3,1,6C,1,1
+Troll Bombs,immediate,0,0,0,0,0,0
 Fat Bat,monster,3,5,1,1T,0,0
 Dople,monster,2,4,2,7C,0,1
 Leech,monster,1,4,2,L1,0,0
@@ -25,7 +26,7 @@ Psy Horf,monster,1,5,1,1L,0,0,0
 Curse Keeper Head,monster,2,4,1,xC,0,1
 Dark Chest,immediate,0,0,0,0,0,0
 Gurdy,monster,5,4,1,7C,1,0
-Dark Goblin,monster,2,4,2,2L,0,1
+Curse Of Greed,curse,0,0,0,0,0,0
 The Haunt,monster,3,4,1,1L,1,1
 Rage Creep,monster,1,5,1,2L,0,1
 Holy Squirt,monster,2,3,1,2L,0,1
@@ -88,7 +89,6 @@ Cod Worm,monster,2,5,0,3C,0,0
 Mom's Eye,monster,1,4,2,1L,0,1
 Cursed Horf,monster,1,4,1,3C,0,1
 Chest,immediate,0,0,0,0,0,0
-Troll Bombs,immediate,0,0,0,0,0,0
 Carrion Queen,monster,3,4,1,1T,1,1
 Envy,monster,2,5,1,1C,1,1
 The Lamb,monster,6,3,5,3C,1,1

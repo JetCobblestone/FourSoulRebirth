@@ -8,6 +8,11 @@ class EventType(Enum):
 
 class Event:
 
+    source = None
+
     def __init__(self, eventType, data):
         self.eventType = eventType
         self.data = data
+
+    def setSource(self, source):
+        self.source = source

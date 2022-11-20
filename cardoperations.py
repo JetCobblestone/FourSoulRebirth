@@ -10,7 +10,7 @@ def draw(n, deck, player, game):
     else:  # For loot cards
         for i in range(0, n):
             player.loot_cards.append(game.loot_deck.pop())
-        print("Setup Done")
+        print(str(n)+" cards given to player "+str(player.id))
 
 
 

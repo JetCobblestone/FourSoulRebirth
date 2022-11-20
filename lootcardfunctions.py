@@ -24,11 +24,17 @@ def cardtype(card, player, game):
 
         target_choice = int(input())
         target = targets[target_choice]
-        print(type(target))
         if str(type(target)) == "<class '__main__.Player'>":
-            pass
-        else:
             target.take_damage(bomb(card.func_args))
+        else:
+            if target.take_damage(bomb(card.func_args), game, player):  # Deal damage to the monster, if dead, handle it
+                for slot in game.active_monsters:
+                    if slot[-1] == target:
+                        slot.pop()
+                        game.checkMonsterSlots()
+                        break
+
+
         # if target = monster, monster damage
         # else player damage
 
