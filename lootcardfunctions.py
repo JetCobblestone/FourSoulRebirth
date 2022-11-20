@@ -1,7 +1,6 @@
 import dice
 import cardoperations as co
 
-
 def cardtype(card, player, game):
     if card.type == "coin":
         player.coins += coin(card.func_args)
@@ -23,7 +22,7 @@ def cardtype(card, player, game):
             except:
                 print(target.id)
 
-        target_choice = int(input())
+        target_choice = int(player.getChoice(()))
         target = targets[target_choice]
         if str(type(target)) == "<class '__main__.Player'>":
             target.take_damage(bomb(card.func_args))
@@ -34,7 +33,6 @@ def cardtype(card, player, game):
                         slot.pop()
                         game.checkMonsterSlots()
                         break
-
 
         # if target = monster, monster damage
         # else player damage
@@ -157,7 +155,8 @@ def reroll(args):
 
     elif args[0] == "choice":
         while True:
-            choice = input("Enter a number between 1 and 6")
+            player.sendMessage("Enter a number between 1 and 6")
+            choice = player.getChoice()
 
             try:
                 choice = int(choice)
@@ -194,7 +193,8 @@ def scry(args, game):
     # Need to change so all players don't see it
     print(scry_array)
     # Player inputs their scry code
-    scry_code = input("Enter a scry code as a list of indexes with no spaces: ")
+    player.sendMessage("Enter a scry code as a list of indexes with no spaces: ")
+    scry_code = player.getChoice()
 
     for i in range(len(scry_array)):
         if i < ontop:

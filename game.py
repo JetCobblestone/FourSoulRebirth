@@ -102,7 +102,8 @@ class MonsterCard(Card):
         super().__init__(name)
 
     def attack_monster(self, player, defense, turn_hp, game):
-        input("Press enter to roll")
+        player.sendMessage("Press enter to roll")
+        player.getChoice()
         player_attack = dice.dice()
         # ADD MODIFIERS --------------------------------------------------------------------------------------------------
         if mcf.nodamage(self, player_attack) and self.effectBool == 1:
@@ -253,7 +254,7 @@ class MonsterCard(Card):
                 choices = ["Loot 2, Take 1 Damage", "Search the treasure deck for a guppy item. Gain it and take 2 damage. Shuffle the deck."]
                 print(choices)
                 player = game.players[game.turn-1]
-                choice = int(input(""))
+                choice = int(player.getChoice())
                 if choice == 0:
                     co.draw(2, "loot", player, game)
                     player.takeDamage(1)
@@ -426,7 +427,8 @@ class Game:
         co.draw(1, "loot", currentPlayer, self)
 
         while True:
-            playcard = input("Play loot card? [Y/N]: ")
+            sendMessage("Play loot card? [Y/N]: ")
+            playcard = getChoice()
             if playcard == "Y":
                 card = co.chooseLootCard(currentPlayer)
                 lcf.cardtype(card, currentPlayer, self)
@@ -441,7 +443,8 @@ class Game:
         if not currentPlayer.dead:
             if currentPlayer.freecardplayed:
                 while True:
-                    playcard = input("Play another? [Y/N]: ")
+                    sendMessage("Play loot card? [Y/N]: ")
+                    playcard = getChoice()
                     if playcard == "Y":
                         card = co.chooseLootCard(currentPlayer)
                         lcf.cardtype(card, currentPlayer, self)
@@ -461,7 +464,8 @@ class Game:
 
                 if currentPlayer.coins >= 10:
                     while True:
-                        buy_item = input("Buy Item? [Y/N]: ")
+                        sendMessage("Buy Item? [Y/N]: ")
+                        buy_item = getChoice()
                         if buy_item == "Y":
                             choices = ["Deck"]
                             print("0: Deck")
@@ -471,7 +475,8 @@ class Game:
 
                             which_item = 999
                             while int(which_item) > len(choices):
-                                which_item = input("Select Item [0-"+str(len(choices)-1)+"]: ")
+                                sendMessage("Select Item [0-"+str(len(choices)-1)+"]: ")
+                                which_item = getChoice()
                                 if which_item == "0":
                                     currentPlayer.treasure_cards.append(self.treasure_deck.pop())
                                     currentPlayer.coins -= 10
@@ -501,7 +506,8 @@ class Game:
 
                 print()
                 while True and not currentPlayer.dead:
-                    do_attack = input("Attack a monster? [Y/N]: ")
+                    sendMessage("Attack a monster? [Y/N]: ")
+                    do_attack = getChoice()
 
                     if do_attack == "Y":
                         monsters = ["Deck"]
@@ -512,7 +518,8 @@ class Game:
 
                         which_monster = 999
                         while int(which_monster) > len(monsters):
-                            which_monster = input("Select monster [0-"+str(len(monsters)-1)+"]")
+                            sendMessage("Select monster [0-"+str(len(monsters)-1)+"]")
+                            which_monster = getChoice()
 
                             monster = None
                             while True:
